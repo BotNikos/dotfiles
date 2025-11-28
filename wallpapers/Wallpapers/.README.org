@@ -1,0 +1,6 @@
+#+Title: Wallpapers
+#+Author: Bot_Nikos
+
+* Description
+    My wallpaper directory.
+    Also here you can find my bash script for set wallpaper on Desktop. This script used in my awesome configuration.

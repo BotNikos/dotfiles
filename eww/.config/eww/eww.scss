@@ -1,0 +1,128 @@
+/*Dracula theme*/
+
+$background: #282A36;
+$background2: #383A59;
+$foreground: #F4F4EF;
+$foregroundDim: #6272A4;
+$accent: #BD93F9;
+$orange: #FF9C32;
+$majenta: #FF79C6;
+$blue: #7CCCDF;
+$yellow: #F1FA8C;
+$green: #50FA7B;
+
+/*Gruvbox theme*/
+
+// $background: #282828;
+// $background2: #3c3836;
+// $foreground: #ebdbb2;
+// $foregroundDim: #928374;
+// $accent: #b8bb26;
+// $majenta: #cc241d;
+// $blue: #83a598;
+// $yellow: #d79921;
+// $green: #b8bb26;
+
+
+* {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.container {
+    background: $background;
+}
+
+.text {
+    color: $foreground;
+    font-family: "Mononoki Nerd Font";
+    font-size: 20px;
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+.workspaceContainer {
+    margin-left: 10px;
+}
+
+.w-btn {
+    border: none;
+    border-radius: 0px;
+    min-width: 20px;
+    min-height: 20px;
+}
+
+.w-btn-act {
+    background: $accent;
+}
+
+.w-btn-inact {
+    background: $background2;
+}
+
+.lang {
+    color: $background;
+    background: $majenta;
+    padding-right: 10px;
+    padding-left: 10px;
+    border: none;
+    border-radius: 0px;
+}
+
+.updates {
+    color: $background;
+    background: $blue;
+    padding-right: 10px;
+    padding-left: 10px;
+    border: none;
+    border-radius: 0;
+    margin-right: -10px;
+}
+
+.battery {
+    color: $background;
+    background: $yellow;
+    padding-right: 10px;
+    padding-left: 10px;
+    border: none;
+    border-radius: 0;
+    margin-left: -10px;
+}
+
+.time {
+    color: $background;
+    background: $blue;
+    padding-left: 10px;
+    margin-left: -10px;
+}
+
+.volume-text {
+    color: $foreground;
+    font-family: "Mononoki Nerd Font";
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.volume-progress > trough {
+    background-color: $background2;
+    min-height: 40px;
+    border-radius: 0;
+    border: 5px solid $background2;
+}
+
+.volume-progress > trough > progress {
+    background-color: $accent;
+    min-height: 40px;
+}
+
+.lang-popup {
+    color: $foreground;
+    font-family: "Mononoki Nerd Font";
+    font-size: 80px;
+    font-weight: bold;
+    background-color: $background;
+    border: 2px solid $accent;
+}

@@ -1,0 +1,43 @@
+border-size=2
+border-radius=10
+background-color=#282828
+text-color=#dfbf8e
+border-color=#3C3836
+progress-color=over #689d6a
+
+width=500
+height=200
+
+margin=40
+padding=10
+
+history=1
+max-history=100
+default-timeout=25000
+font=Mononoki Nerd Font 16
+
+[urgency=low]
+# border-color=#8BE9FD
+format=<span color="#e3a84e" font="20"><b>%s</b></span>\n%b
+
+[urgency=normal]
+# border-color=#BD93F9
+format=<span color="#a9b665" font="20"><b>%s</b></span>\n%b
+
+[urgency=high]
+# border-color=#ff5555
+format=<span color="#ea6962" font="20"><b>%s</b></span>\n%b
+
+[app-name=wp-vol]
+text-alignment=center
+layer=overlay
+history=0
+anchor=bottom-center
+# Group all volume notifications together
+group-by=app-name
+# Hide the group-index
+format=<b>%s</b>\n%b
+
+[app-name=volume group-index=0]
+# Only show last notification
+invisible=0

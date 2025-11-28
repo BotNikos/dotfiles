@@ -1,0 +1,165 @@
+(defwindow language-win
+           :monitor 0
+           :stacking "fg"
+           :wm-ignore true
+           :geometry (geometry
+                      :width "6%"
+                      :y "15%"
+                      :anchor "bottom center")
+            (language-popup-lbl))
+
+(defwidget language-popup-lbl []
+           (label
+            :class "lang-popup"
+            :text "${device.active_keymap == 'English (US)' ? 'US' : 'RU'}"))
+
+(defwindow volume-meter
+           :monitor 0
+           :stacking "fg"
+           :exclusive false
+           :wm-ignore true
+           :geometry (geometry
+                      :width "30%"
+                      :y "15%"
+                      :anchor "bottom center")
+           (volume))
+
+(defvar volume-visible false)
+
+(defpoll volume-value
+         :interval "10ms"
+         :initial-value "50"
+         :run-while volume-visible
+         "pamixer --get-volume")
+
+(defwidget volume []
+           (overlay
+            (progress
+             :class "volume-progress"
+             :value volume-value
+
+             :orientation "h")
+            (label
+             :class "volume-text"
+             :text "${volume-value} / 100")
+            ))
+
+(defwindow status-bar
+           :monitor 0
+           :stacking "fg"
+           :exclusive true
+           :wm-ignore true
+           :geometry (geometry
+                      :width "100%"
+                      :height "3%"
+                      :anchor "top center")
+           (container))
+
+(defwidget container []
+           (box
+            :class "container"
+            :hexpand true :vexpand true
+            :orientation "horizontal"
+            :spacing 10
+            :space-evenly false
+            ;;(winTitle)
+			(activeApp)
+            (space)
+            (tray)
+            ;; (updates)
+            (language)
+            (timeWid)
+	    (battery)))
+
+(defwidget space []
+           (label
+            :hexpand true
+            :text ""))
+
+(defpoll time
+         :interval "1s"
+         :initial "initial-value"
+         `date '+%I:%M:%S %p'`)
+
+(defwidget timeWid []
+           (label
+            :class "text time"
+            :halign "end"
+            :text "${time}"))
+
+(defpoll workspacesJson
+         :interval "1s"
+         :initial `[{"id": 1, "id": 2, "id": 3, "id": 4, "id": 5}]`
+           `swaymsg -t get_workspaces | jq '. | sort_by (.num)'`)
+
+
+(defpoll activeWorkspace
+         :interval "1s"
+         :initial `[{"id": 1}]`
+         `swaymsg -t get_workspaces | jq '.[] | select(.focused==true)'`)
+
+(defwidget workspaces []
+           (box
+            :class "workspaceContainer"
+            :halign "start" :valign "center"
+            :spacing 10 
+            :orientation "h"
+
+            (for workspace in workspacesJson
+                 (button
+                  :class {activeWorkspace.id == workspace.id ? "w-btn w-btn-act" : "w-btn w-btn-inact"}))))
+
+(defpoll windowTitle
+         :interval "1s"
+         :initial-value `[{"title": "nothing"}]`
+         `swaymsg -t get_tree | jq '.. | select(.type?) | select(.focused==true) | .name' | tr -d '\"'`)
+
+(defwidget winTitle []
+           (label
+            :class "text"
+	    :limit-width 100
+            :text "${windowTitle}"))
+
+(defwidget tray []
+           (systray
+            :halign "end" :valign "center"
+            :spacing 10
+            :orientation "h"))
+
+(defpoll device
+         :interval "100ms"
+         :initial-value `[{"main": true, active_keymap: "English (US)"}]`
+         `swaymsg -t get_inputs | jq '.[0].xkb_active_layout_name'`)
+
+(defwidget language []
+           (button
+            :class "text lang"
+            "${device == '\"English (US)\"' ? 'us' : 'ru'}"))
+
+(defpoll updatesCount
+         :initial-value 0
+         :interval "30m"
+         `checkupdates | wc -l`)
+
+(defwidget updates []
+           (button
+            :class "text updates"
+            "${updatesCount == 0 ? 'no need to update' : 'update ${updatesCount} packages'}"))
+
+(defwidget battery []
+	   (label
+	    :class "text battery"
+	    :style "background: ${EWW_BATTERY['BAT0'].status == 'Discharging' ? '#F1FA8C' : '#50FA7B'}"
+	    :text "${EWW_BATTERY['BAT0'].capacity} %"))
+
+(defpoll currentApp
+		:initial-value ""
+		:interval "500ms"
+		`niri msg focused-window | grep Title | cut -d ':' -f 2 | sed 's/"//g'`)
+
+(defwidget activeApp []
+		(label
+		:class "text"
+		:limit-width 100
+		:style "padding-left: 20px"
+		:text "${currentApp}"))
