@@ -55,8 +55,6 @@
   (define-key vertico-map (kbd "C-k") #'vertico-previous)
   (vertico-mode))
 
-;; Navigation ------------------------------------------------------------------
-
 ;;; Avy ------------------------------------------------------------------------
 
 (use-package avy
@@ -130,20 +128,20 @@
   (add-to-list 'eglot-server-programs '(c-mode "ccls")))
 
 ;; Dimmer ----------------------------------------------------------------------
-;; (use-package dimmer
-;;   :ensure t
-;;   :config
-;;   (dimmer-configure-magit)
-;;   (dimmer-configure-org)
-;;   (dimmer-configure-posframe)
-;;   (setq dimmer-adjustment-mode :foreground)
-;;   (setq dimmer-fraction 0.30)
-;;   (setq dimmer-prevent-dimming-predicates '(window-minibuffer-p vertico-active-p))
-;;   (setq dimmer-exclusion-regexp-list '(" \\*\\(LV\\|transient\\)\\*"
-;;                                        "^\\*Minibuf-[0-9]+\\*"
-;;                                        "^.\\*which-key\\*$"
-;;                                        "^.\\*Echo.*\\*"))
-;;   :init (dimmer-mode))
+(use-package dimmer
+  :ensure t
+  :config
+  (dimmer-configure-magit)
+  (dimmer-configure-org)
+  (dimmer-configure-posframe)
+  (setq dimmer-adjustment-mode :foreground)
+  (setq dimmer-fraction 0.30)
+  (setq dimmer-prevent-dimming-predicates '(window-minibuffer-p vertico-active-p))
+  (setq dimmer-exclusion-regexp-list '(" \\*\\(LV\\|transient\\)\\*"
+                                       "^\\*Minibuf-[0-9]+\\*"
+                                       "^.\\*which-key\\*$"
+                                       "^.\\*Echo.*\\*"))
+  :init (dimmer-mode))
 
 ;; Dirvish ---------------------------------------------------------------------
 (use-package dirvish
@@ -163,26 +161,25 @@
 
 ;; Geiser and depended packages ------------------------------------------------
 (use-package paredit
-  :ensure t)
+  :ensure t
+  :bind (:map paredit-mode-map
+	      ("C-)" . paredit-forward-slurp-sexp)
+	      ("C-(" . paredit-backward-slurp-sexp)
+	      ("C-}" . paredit-forward-barf-sexp)
+	      ("C-{" . paredit-backward-barf-sexp)))
 
 (use-package geiser-chicken
   :ensure t
-  :bind (:map geiser-mode-map
-	      ("C-." . nil))
-  :hook ((geiser-mode . paredit-mode)))
+  :hook ((geiser-mode . (lambda () (paredit-mode) (my/geiser-mode-bindings))))
+  :config
+  (defun my/geiser-mode-bindings ()
+    (define-key geiser-mode-map (kbd "C-.") nil)))
 
 ;; Diff-hl ---------------------------------------------------------------------
 (use-package diff-hl
   :ensure t
   :init (global-diff-hl-mode)
   (diff-hl-flydiff-mode))
-
-
-;; Org -------------------------------------------------------------------------
-(use-package org
-  :bind (:map org-mode-map
-	      ("M-RET" . org-insert-heading-after-current))
-  :hook (org-mode . org-indent-mode))
 
 ;; hl-todo ---------------------------------------------------------------------
 (use-package hl-todo

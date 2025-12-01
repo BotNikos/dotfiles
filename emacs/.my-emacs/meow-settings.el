@@ -86,6 +86,27 @@
 
 (add-to-list 'meow-mode-state-list '(dired-mode . dir))
 
+
+;; Org-agenda keymap -----------------------------------------------------------
+
+(setq meow-agenda-keymap (make-keymap))
+(meow-define-state agenda
+  "meow state fro org-agenda"
+  :lighter " [A]"
+  :keymap meow-agenda-keymap)
+
+(setq meow-cursor-type-agenda "box")
+
+(meow-define-keys 'agenda
+  '("j" . meow-next)
+  '("k" . meow-prev)
+  '("]" . org-agenda-later)
+  '("[" . org-agenda-earlier)
+  '("SPC d s" . org-agenda-schedule)
+  '("SPC t" . org-agenda-todo))
+
+(add-to-list 'meow-mode-state-list '(org-agenda-mode . agenda))
+
 ;; Default settings ------------------------------------------------------------
 
 (defun meow-setup ()
