@@ -8,7 +8,7 @@
   (process-signal pid signal/usr1))
 
 (define (main arg)
-  (let ((wall-proc-pid (with-input-from-file "/home/nikita/scm/wallpapers/wallpapers.pid" (lambda () (read)))))
+  (let ((wall-proc-pid (with-input-from-file "/tmp/wallpapers.pid" (lambda () (read)))))
     (case (string->symbol arg)
       ((next) (next-wall wall-proc-pid)))))
 
