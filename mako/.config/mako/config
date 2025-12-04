@@ -38,6 +38,15 @@ group-by=app-name
 # Hide the group-index
 format=<b>%s</b>\n%b
 
+[app-name=wp-lang]
+width=100
+text-alignment=center
+layer=overlay
+history=0
+group-by=app-name
+anchor=center
+format=<span color="#e3a84e" font="32"><b>%s</b></span>
+
 [app-name=volume group-index=0]
 # Only show last notification
 invisible=0
