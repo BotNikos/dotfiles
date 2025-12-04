@@ -1,4 +1,3 @@
-
 (use-package nerd-icons
   :ensure t)
 
@@ -76,7 +75,6 @@
 
 (use-package highlight-parentheses
   :ensure t
-  :hook (prog-mod . highlight-parentheses-mode)
   :config
   (setq highlight-parentheses-background-colors `(,(face-attribute 'orderless-match-face-0 :foreground)
 						  ,(face-attribute 'orderless-match-face-1 :foreground)
@@ -86,7 +84,8 @@
   (setq highlight-parentheses-colors `(,(face-attribute 'highlight :foreground)
 				       ,(face-attribute 'highlight :foreground)
 				       ,(face-attribute 'highlight :foreground)
-				       ,(face-attribute 'highlight :foreground))))
+				       ,(face-attribute 'highlight :foreground)))
+  (global-highlight-parentheses-mode))
 
 ;; Doom modeline ---------------------------------------------------------------
 
@@ -203,7 +202,6 @@
 ;; Colorful-mode
 (use-package colorful-mode
   :ensure t
-  :custom
-  (setq colorful-use-prefix t)
   :config
+  (setq colorful-use-prefix t)
   (global-colorful-mode))
