@@ -68,11 +68,25 @@
 (use-package projectile
   :ensure t)
 
-;; Rainbow-delimiters ----------------------------------------------------------
+;; Parenthesis setup ----------------------------------------------------------
 
-(use-package rainbow-delimiters
+;; (use-package rainbow-delimiters
+;;   :ensure t
+;;   :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package highlight-parentheses
   :ensure t
-  :hook (prog-mode . rainbow-delimiters-mode))
+  :hook (prog-mod . highlight-parentheses-mode)
+  :config
+  (setq highlight-parentheses-background-colors `(,(face-attribute 'orderless-match-face-0 :foreground)
+						  ,(face-attribute 'orderless-match-face-1 :foreground)
+						  ,(face-attribute 'orderless-match-face-2 :foreground)
+						  ,(face-attribute 'orderless-match-face-3 :foreground)))
+  
+  (setq highlight-parentheses-colors `(,(face-attribute 'highlight :foreground)
+				       ,(face-attribute 'highlight :foreground)
+				       ,(face-attribute 'highlight :foreground)
+				       ,(face-attribute 'highlight :foreground))))
 
 ;; Doom modeline ---------------------------------------------------------------
 
@@ -185,3 +199,11 @@
 (use-package hl-todo
   :ensure t
   :init (global-hl-todo-mode))
+
+;; Colorful-mode
+(use-package colorful-mode
+  :ensure t
+  :custom
+  (setq colorful-use-prefix t)
+  :config
+  (global-colorful-mode))

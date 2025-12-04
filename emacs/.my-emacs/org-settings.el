@@ -22,6 +22,8 @@
 			       ("NO" .		(:inherit bold error org-todo))
 			       ("KILL" .	(:inherit bold error org-todo))))
 
+(setq org-habit-graph-column 100)
+
 (use-package org
   :bind (:map org-mode-map
 	 ("M-RET" . org-insert-heading-after-current)
