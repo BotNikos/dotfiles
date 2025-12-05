@@ -17,7 +17,7 @@
  '(custom-safe-themes
    '("f1e8339b04aef8f145dd4782d03499d9d716fdc0361319411ac2efc603249326" default))
  '(package-selected-packages
-   '(colorful-mode highlight-parentheses hl-todo paredit diff-hl geiser-chicken dirvish dimmer zoom spacious-padding kanagawa-themes indent-bars ripgrep magit cape org-super-agenda doom-modeline flycheck nerd-icons rainbow-delimiters marginalia projectile perspective punch-line meow avy orderless vertico emacs-everywhere doom-themes mu4e)))
+   '(lua-mode colorful-mode highlight-parentheses hl-todo paredit diff-hl geiser-chicken dirvish dimmer zoom spacious-padding kanagawa-themes indent-bars ripgrep magit cape org-super-agenda doom-modeline flycheck nerd-icons rainbow-delimiters marginalia projectile perspective punch-line meow avy orderless vertico emacs-everywhere doom-themes mu4e)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

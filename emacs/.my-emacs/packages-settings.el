@@ -199,9 +199,13 @@
   :ensure t
   :init (global-hl-todo-mode))
 
-;; Colorful-mode
+;; Colorful-mode ---------------------------------------------------------------
 (use-package colorful-mode
   :ensure t
   :config
   (setq colorful-use-prefix t)
   (global-colorful-mode))
+
+;; Lua-mode
+(use-package lua-mode
+  :ensure t)
