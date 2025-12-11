@@ -30,5 +30,6 @@
 	 ("C-j" . scroll-half-page-up)
 	 ("C-k" . scroll-half-page-down))
   
-  :hook (org-mode . org-indent-mode))
+  :hook ((org-mode . org-indent-mode)
+	 (org-super-agenda-mode . (lambda () (setq org-habit-graph-column (- (window-width) 50))))))
 
