@@ -8,7 +8,13 @@
   :custom
   (persp-mode-prefix-key (kbd "C-c TAB"))
   :config
-  (persp-mode))
+  (persp-mode)
+  
+  (customize-set-variable 'display-buffer-base-action
+			  '((display-buffer-reuse-window display-buffer-same-window)
+			    (reusable-frames . t)))
+
+  (customize-set-variable 'even-window-sizes nil))
 
 ;;; Vertico and dependet packages ----------------------------------------------
 
@@ -34,7 +40,9 @@
   :ensure t
   :config
   (consult-customize consult--source-buffer :hidden t :default nil)
-  (add-to-list 'consult-buffer-sources persp-consult-source))
+  (add-to-list 'consult-buffer-sources persp-consult-source)
+  (setq xref-show-xrefs-function #'consult-xref
+	xref-show-definitions-function #'consult-xref))
 
 (use-package orderless
   :ensure t
@@ -206,6 +214,17 @@
   (setq colorful-use-prefix t)
   (global-colorful-mode))
 
-;; Lua-mode
+;; Lua-mode --------------------------------------------------------------------
 (use-package lua-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq lua-indent-level 8))
+
+;; Dashboard
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-items '((recents	. 5)
+			  (bookmarks	. 5)
+			  (projects	. 5))))
