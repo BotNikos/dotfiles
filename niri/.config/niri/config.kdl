@@ -285,6 +285,7 @@ spawn-sh-at-startup "eww open status-bar"
 spawn-sh-at-startup "awww-daemon"
 spawn-sh-at-startup "~/scm/eye_timer/eye_timer.scm 25m"
 spawn-sh-at-startup "~/scm/wallpapers/wallpapers.scm 30m /home/nikita/Wallpapers/"
+spawn-sh-at-startup "~/scm/battery/battery.scm"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -621,7 +622,7 @@ binds {
     // a matching layout switch hotkey configured in xkb options above.
     // Having both at once on the same hotkey will break the switching,
     // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-    Mod+Space       { spawn-sh "~/scm/scm/lang.scm"; }
+    Mod+Space       { spawn-sh "~/scm/lang/lang.scm"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
     Print { screenshot; }
