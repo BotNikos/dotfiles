@@ -14,7 +14,8 @@
 			  '((display-buffer-reuse-window display-buffer-same-window)
 			    (reusable-frames . t)))
 
-  (customize-set-variable 'even-window-sizes nil))
+  (customize-set-variable 'even-window-sizes nil)
+  (customize-set-variable 'ediff-window-setup-function 'ediff-setup-windows-plain))
 
 ;;; Vertico and dependet packages ----------------------------------------------
 
@@ -134,13 +135,19 @@
   :init (spacious-padding-mode))
 
 ;; Zoom ------------------------------------------------------------------------
- (use-package zoom
+(use-package zoom
   :ensure t
+  :init (zoom-mode)
+  :hook (ediff-after-setup-windows . (lambda () (my/fix-ediff-size) (dimmer-mode -1)))
   :config
   (setq zoom-size '(0.618 . 0.618))
   (setq zoom-ignored-major-modes '(ediff-mode dired-mode))
   (setq zoom-ignored-buffer-name-regexps '("gud" "locals of" "stack frames of" "breakpoints of" "input/output of" "^\\*Org " "^CAPTURE-"))
-  :init (zoom-mode))
+
+  (defun my/fix-ediff-size ()
+    (with-selected-window (get-buffer-window "*Ediff Control Panel*")
+      (setq window-size-fixed t)
+      (window-resize (selected-window) (- 5 (window-total-height)) nil t))))
 
 ;; Eglot -----------------------------------------------------------------------
 (use-package eglot
