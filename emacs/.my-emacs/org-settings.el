@@ -33,3 +33,11 @@
   :hook ((org-mode . org-indent-mode)
 	 (org-super-agenda-mode . (lambda () (setq org-habit-graph-column (- (window-width) 50))))))
 
+;; Babel
+
+(setq org-confirm-babel-evaluate nil)
+(org-babel-do-load-languages 'org-babel-load-languages '((sql		. t)
+							 (sqlite	. t)
+							 (C		. t)
+							 (scheme	. t)))
+
