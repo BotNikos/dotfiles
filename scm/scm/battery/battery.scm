@@ -1,3 +1,5 @@
+#! /usr/bin/csi -script
+
 (import (chicken io)
 	(chicken process)
 	(chicken format))
