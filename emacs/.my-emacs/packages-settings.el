@@ -151,7 +151,8 @@
 
 ;; Eglot -----------------------------------------------------------------------
 (use-package eglot
-  :hook ((eglot-managed-mode . (lambda () (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'region))))
+  :hook ((eglot-managed-mode . (lambda () (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'region)))
+	 (c-mode-hook . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs '(c-mode "ccls")))
 
