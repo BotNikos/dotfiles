@@ -63,7 +63,10 @@
 	("v v" . magit-status)
 	("v l" . magit-log-buffer-file)
 	("v b" . magit-branch-checkout)
-	("v B" . magit-blame-addition)))
+	("v B" . magit-blame-addition)
+
+	;; Tempel keys
+	("t i" . tempel-insert)))
 
 (setq meow-local-leader-org-keys '(("n d s" . org-schedule)))
 
