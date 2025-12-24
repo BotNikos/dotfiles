@@ -4,6 +4,8 @@
 (winner-mode)
 (electric-pair-mode)
 (global-hl-line-mode)
+(global-display-fill-column-indicator-mode)
+(global-visual-line-mode)
 
 ;;; Font and colors
 
@@ -12,10 +14,20 @@
 
 (use-package doom-themes
   :ensure t
-  :config)
+  ;; :config
+  ;; Another good themes
+  ;; Light
+  ;; (load-theme 'doom-flatwhite t)
+  ;; (load-theme 'doom-everforest-light t)
+  ;; (load-theme 'doom-gruvbox-light t)
+
+  ;; Dark
+  ;; (load-theme 'doom-gruvbox)
+  )
 
 (setq doom-everforest-background "hard")
 (load-theme 'doom-everforest t)
+
 
 (set-frame-font "Mononoki Nerd Font 16")
 (setq-default line-spacing 0)
@@ -47,8 +59,7 @@
 (setq js-indent-level tab-width)
 
 ;;; Fill-column indicator
-(setq fill-column 80)
-(setq display-fill-column-indicator "#")
-;; (set-face-attribute 'fill-column-indicator nil :foreground nil :background nil)
+(setq-default fill-column 80)
+(set-face-attribute 'fill-column-indicator nil :foreground "grey40" :background nil)
 
 
