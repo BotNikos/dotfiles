@@ -12,5 +12,5 @@ Clone this repo and run stow:
 #+begin_src bash
   git clone https://github.com/BotNikos/dotfiles.git
   cd dotfiles
-  staw -R -v -t ~ .
+  stow -R -v -t ~ .
 #+end_src
