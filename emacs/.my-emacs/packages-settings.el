@@ -151,8 +151,9 @@
 
 ;; Eglot -----------------------------------------------------------------------
 (use-package eglot
-  :hook ((eglot-managed-mode . (lambda () (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'region)))
-	 (c-mode-hook . eglot-ensure))
+  :after (tempel)
+  :hook ((eglot-managed-mode . (lambda () (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'region) (tempel-setup-capf)))
+	 (c-mode . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs '(c-mode "ccls")))
 
@@ -249,7 +250,7 @@
   :init
   (defun tempel-setup-capf ()
     (setq-local completion-at-point-functions
-                (cons #'tempel-expand completion-at-point-functions))))
+                (cons #'tempel-expand (remq 'tempel-expand completion-at-point-functions)))))
 
 (use-package tempel-collection
   :ensure t)
