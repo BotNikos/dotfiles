@@ -39,5 +39,6 @@
 (org-babel-do-load-languages 'org-babel-load-languages '((sql		. t)
 							 (sqlite	. t)
 							 (C		. t)
+							 (gnuplot	. t)
 							 (scheme	. t)))
 

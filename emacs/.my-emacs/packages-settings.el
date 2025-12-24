@@ -227,7 +227,7 @@
   :config
   (setq lua-indent-level 8))
 
-;; Dashboard
+;; Dashboard -------------------------------------------------------------------
 (use-package dashboard
   :ensure t
   :config
@@ -236,3 +236,38 @@
   (setq dashboard-week-agenda 'nil)
   (setq dashboard-items '((recents	. 10)
 			  (projects	. 10))))
+
+;; Tempel ----------------------------------------------------------------------
+
+(use-package tempel
+  :ensure t
+  :hook ((conf-mode . tempel-setup-capf)
+	 (prog-mode . tempel-setup-capf)
+	 (text-mode . tempel-setup-capf)
+	 (org-mode  . tempel-setup-capf))
+  :init
+  (defun tempel-setup-capf ()
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand completion-at-point-functions))))
+
+(use-package tempel-collection
+  :ensure t)
+
+;; Ibuffer-projectile ----------------------------------------------------------
+(use-package ibuffer-vc
+  :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
+  :ensure t)
+
+
+;; Spelling --------------------------------------------------------------------
+
+(use-package flyspell-correct
+  :ensure t
+  :bind (:map flyspell-mode-map
+	      ("C-;" . flyspell-correct-wrapper)
+	      ("C-," . nil)))
+
+;; Gnuplot ---------------------------------------------------------------------
+
+(use-package gnuplot
+  :ensure t)
