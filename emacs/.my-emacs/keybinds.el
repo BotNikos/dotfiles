@@ -9,5 +9,5 @@
 ;; (global-set-key (kbd "C-c b b") #'consult-buffer)
 
 ;; Some meow-related keybinds, more in meow-settings.el
-(global-set-key (kbd "C-.") #'undo)
+(global-set-key (kbd "C-M-z") #'undo)
 (global-set-key (kbd "C-/") #'comment-line)

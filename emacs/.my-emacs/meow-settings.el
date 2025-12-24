@@ -211,4 +211,4 @@
 				  (block . 10)
 				  (find . 10)
 				  (till . 10)))
-  (setq meow--kbd-undo "C-."))
+  (setq meow--kbd-undo "C-M-z"))
