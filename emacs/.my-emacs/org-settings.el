@@ -1,7 +1,12 @@
 (setq org-directory "~/org")
 
-;; Agenda-files 
-(setq org-agenda-files '("~/org/" "~/org/work/" "~/org/daily/" "~/org/dnd/" ))
+(setq org-capture-templates
+      `(("p" "Current project TODO" entry (file (lambda () (concat org-directory "/projects/" (projectile-project-name) ".org")))
+	 "** TODO %? %i\n%u\n%a")))
+
+;; Agenda-files
+
+(setq org-agenda-files '("~/org/" "~/org/work/" "~/org/daily/" "~/org/dnd/" "~/org/projects" ))
 (setq org-agenda-files (append org-agenda-files (directory-files-recursively "~/org/study/" "\\.org$")))
 (setq org-agenda-files (append org-agenda-files (directory-files-recursively "~/org/todo/" "\\.org$")))
 
@@ -10,8 +15,6 @@
 (setq org-todo-keywords '((sequence "TODO(t)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
 			  (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
 			  (sequence "|" "OKAY(o)" "YES(y)" "NO(n)")))
-
-;; (setq org-agenda-skip-scheduled-if-done t)
 
 (setq org-todo-keyword-faces '(("[-]" .		(:inherit bold font-lock-constant-face org-todo))
 			       ("STRT" .	(:inherit bold font-lock-constant-face org-todo))
@@ -24,15 +27,6 @@
 
 (setq org-habit-graph-column 100)
 
-(use-package org
-  :bind (:map org-mode-map
-	 ("M-RET" . org-insert-heading-after-current)
-	 ("C-j" . scroll-half-page-up)
-	 ("C-k" . scroll-half-page-down))
-  
-  :hook ((org-mode . org-indent-mode)
-	 (org-super-agenda-mode . (lambda () (setq org-habit-graph-column (- (window-width) 50))))))
-
 ;; Babel
 
 (setq org-confirm-babel-evaluate nil)
@@ -40,5 +34,27 @@
 							 (sqlite	. t)
 							 (C		. t)
 							 (gnuplot	. t)
+							 (restclient	. t)
 							 (scheme	. t)))
 
+(defun org-return-dwim ()
+  (interactive)
+  (let ((type (org-element-type (org-element-context))))
+    (pcase type
+      (`headline (org-todo 'done))
+      (`link (org-open-at-point))
+      ((or `src-block `inline-src-block)
+       (org-babel-execute-src-block)))))
+
+(use-package org
+  :bind (:map org-mode-map
+	 ("M-RET" . org-return-dwim)
+	 ("C-j" . scroll-half-page-up)
+	 ("C-k" . scroll-half-page-down)
+	 ("M-h" . org-metaleft)
+	 ("M-j" . org-metadown)
+	 ("M-k" . org-metaup)
+	 ("M-l" . org-metaright))
+  
+  :hook ((org-mode . org-indent-mode)
+	 (org-super-agenda-mode . (lambda () (setq org-habit-graph-column (- (window-width) 50))))))
