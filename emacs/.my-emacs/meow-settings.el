@@ -38,8 +38,8 @@
 
 
 	("s s" . avy-goto-char-timer)
-	("." . find-file)
-	("b k" . kill-current-buffer)
+	("."   . find-file)
+	("b k" . kill-buffer-and-window)
 	("b i" . ibuffer)
 	("b b" . consult-buffer)
 	
@@ -214,4 +214,5 @@
 				  (block . 10)
 				  (find . 10)
 				  (till . 10)))
-  (setq meow--kbd-undo "C-M-z"))
+  (setq meow--kbd-undo "C-M-z")
+  (global-set-key (kbd "C-o") 'meow-pop-to-mark))
