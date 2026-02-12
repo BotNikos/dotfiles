@@ -1,0 +1,48 @@
+c-mode
+
+(fn p " ( " p " ) " "{" n> p "\n}")
+(fcom "/**\n\t" p "\n" "\t\\param["p"]\t" p "\t" p "\n*/")
+(fcomp "\t\\param["p"]\t" p "\t" p "\n")
+
+(header "/******************************//*!
+ * \\file	"(p (file-name-nondirectory (buffer-file-name)) filename)"
+ * \\brief	"p"
+ * \\author	"p"
+ * \\date	Создан: "(p (format-time-string "%d.%m.%Y") formdate)"
+ * \\date	Изменён: "(s formdate)"
+ */
+
+#ifndef _"(p (upcase (file-name-sans-extension filename)) upcasename)"_H
+#define _"(s upcasename)"_H
+
+
+/*
+ *	Macros definition
+ */
+
+
+/*
+ *	Type declaration
+ */
+
+
+/*
+ *	Data declaration
+ */
+
+
+/*
+ *	Function declaration
+ */
+
+#ifdef __cplusplus
+extern \"C\" {
+#endif
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _"(s upcasename)"_H */
+")
