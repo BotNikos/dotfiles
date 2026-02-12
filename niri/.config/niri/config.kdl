@@ -112,6 +112,11 @@ output "DP-6" {
     position x=2560 y=0
 }
 
+output "DP-7" {
+    mode "2560x1440@60"
+    position x=2560 y=0
+}
+
 output "HDMI-A-1" {
     mode "2560x1440@144"
     position x=0 y=0
@@ -278,7 +283,7 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-spawn-sh-at-startup "emacs --daemon"
+spawn-sh-at-startup "emacs --init-directory=~/.my-emacs --daemon"
 spawn-sh-at-startup "eww daemon"
 spawn-sh-at-startup "eww open status-bar"
 //spawn-sh-at-startup "swaybg -m fill -i ~/gruvbox-wallpapers/wallpapers/minimalistic/this-wallpaper-is-not-available.png"
@@ -384,6 +389,7 @@ binds {
     Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "~/.config/rofi/launchers/type-7/launcher.sh"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+E hotkey-overlay-title="Open the Emacs editor" { spawn "emacsclient" "-c"; }
+    Mod+Shift+q hotkey-overlay-title="Edit via emacs-everywhere" { spawn "emacsclient" "-c" "-e" "(emacs-everywhere)"; }
     Mod+M hotkey-overlay-title="Open the Emacs file-manager" {spawn "emacsclient" "-c" "-e" "(dirvish)"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.

@@ -1,8 +1,27 @@
 (setq org-directory "~/org")
 
+(defun get-season (month-str)
+  (pcase (string-to-number month-str)
+    ((or 12 1 2) "winter")
+    ((or 3 4 5) "spring")
+    ((or 6 7 8) "summer")
+    ((or 9 10 11) "fall")))
+
 (setq org-capture-templates
       `(("p" "Current project TODO" entry (file (lambda () (concat org-directory "/projects/" (projectile-project-name) ".org")))
+	 "** TODO %? %i\n%u\n%a")
+
+	("t" "Common TODO" entry (file (lambda () (concat org-directory
+							  "/todo/"
+							  (format-time-string "%Y") "/"
+							  (get-season (format-time-string "%m")) "/"
+							  (format-time-string "%m_%b") ".org")))
 	 "** TODO %? %i\n%u\n%a")))
+
+;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 2))
+;; (setq org-preview-latex-default-process 'dvisvgm)
+;; (setq org-startup-with-latex-preview t)
+
 
 ;; Agenda-files
 
@@ -40,6 +59,7 @@
 (defun org-return-dwim ()
   (interactive)
   (let ((type (org-element-type (org-element-context))))
+    (message (symbol-name type))
     (pcase type
       (`headline (org-todo 'done))
       (`link (org-open-at-point))
@@ -51,6 +71,7 @@
 	 ("M-RET" . org-return-dwim)
 	 ("C-j" . scroll-half-page-up)
 	 ("C-k" . scroll-half-page-down)
+	 ("C-M-<return>" . org-insert-item)
 	 ("M-h" . org-metaleft)
 	 ("M-j" . org-metadown)
 	 ("M-k" . org-metaup)

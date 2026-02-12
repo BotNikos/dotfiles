@@ -80,10 +80,6 @@
 
 ;; Parenthesis setup ----------------------------------------------------------
 
-;; (use-package rainbow-delimiters
-;;   :ensure t
-;;   :hook (prog-mode . rainbow-delimiters-mode))
-
 (use-package highlight-parentheses
   :ensure t
   :config
@@ -110,7 +106,36 @@
 ;; Emacs everywhere ------------------------------------------------------------
 
 (use-package emacs-everywhere
-  :ensure t)
+  :ensure t
+  :config
+
+  (setq emacs-everywhere-frame-name-format "emacs-everywhere ∷ %s — %s")
+  (add-to-list 'emacs-everywhere-markdown-apps "Keybase" t)
+
+  ;; Extend emacs-everywhere-system-configs
+  (setq emacs-everywhere-system-configs
+        (append emacs-everywhere-system-configs
+                '(((wayland . niri)
+                   :focus-command ("niri" "msg" "action" "focus-window" "--id" "%w")
+                   :info-function emacs-everywhere--app-info-linux-niri))))
+
+  (defun emacs-everywhere--app-info-linux-niri ()
+    "Return information on the current active window, on a Linux Niri session."
+    (require 'json)
+    (let* ((json (json-read-from-string
+		  (emacs-everywhere--call
+                   "niri" "msg" "-j" "focused-window"))) ;; -j for json
+	   (wid (cdr (assq 'id json)))
+	   (window-id (if (numberp wid) (number-to-string wid) wid))
+	   (window-title (cdr (assq 'title json)))
+	   (app-name (cdr (assq 'app_id json)))
+	   (window-geometry nil)) ;; no geometry in niri
+      (make-emacs-everywhere-app
+       :id window-id
+       :class app-name
+       :title window-title
+       :geometry window-geometry))))
+ 
 
 ;; Org-super-agenda ------------------------------------------------------------
 
@@ -198,7 +223,9 @@
 	      ("C-)" . paredit-forward-slurp-sexp)
 	      ("C-(" . paredit-backward-slurp-sexp)
 	      ("C-}" . paredit-forward-barf-sexp)
-	      ("C-{" . paredit-backward-barf-sexp)))
+	      ("C-{" . paredit-backward-barf-sexp)
+	      ("C-j" . scroll-half-page-up)
+	      ("C-k" . scroll-half-page-down)))
 
 (use-package geiser-chicken
   :ensure t
@@ -311,7 +338,7 @@
 	'(embark-minimal-indicator  ; default is embark-mixed-indicator
           embark-highlight-indicator
           embark-isearch-highlight-indicator))
-  (setq embark-prompter 'embark-completing-read-prompter)
+  (setq embark-prompter 'embark-keymap-prompter)
   (setq embark-quit-after-action nil)
   
 
@@ -335,3 +362,37 @@
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
                  (window-parameters (mode-line-format . none)))))
+
+;; Org-roam --------------------------------------------------------------------
+(use-package org-roam
+  :ensure t
+  :config
+  (setq org-roam-directory (file-truename "~/org"))
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (setq org-roam-graph-link-hidden-types '("file"))
+  (setq org-roam-graph-viewer "/usr/bin/firefox")
+  (setq org-roam-graph-executable "dot")
+  (org-roam-db-autosync-mode))
+
+(use-package org-roam-ui
+  :ensure t
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
+
+
+;; Sqlformatter ----------------------------------------------------------------
+(use-package sqlformat
+  :ensure t
+  :config
+  (setq sqlformat-command 'sql-formatter))
+
+;; Org-wild-notifier -----------------------------------------------------------
+(use-package org-wild-notifier
+  :ensure t
+  :config
+  (setq alert-default-style 'libnotify)
+  (setq org-wild-notifier-alert-time '(5 0)))
+

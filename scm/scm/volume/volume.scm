@@ -1,4 +1,4 @@
-#! /usr/bin/csi -script
+#! /usr/local/bin/csi -script
 
 (import (chicken process)
 	(chicken format)

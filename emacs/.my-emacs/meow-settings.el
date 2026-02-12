@@ -65,6 +65,11 @@
 	("v b" . magit-branch-checkout)
 	("v B" . magit-blame-addition)
 
+	;; File keys
+	("f r" . rename-file)
+	("f d" . delete-file)
+	("f c" . copy-file)
+
 	;; Tempel keys
 	("t i" . tempel-insert)))
 
@@ -102,12 +107,11 @@
 
 (add-to-list 'meow-mode-state-list '(dired-mode . dir))
 
-
 ;; Org-agenda keymap -----------------------------------------------------------
 
 (setq meow-agenda-keymap (make-keymap))
 (meow-define-state agenda
-  "meow state fro org-agenda"
+  "meow state for org-agenda"
   :lighter " [A]"
   :keymap meow-agenda-keymap)
 
@@ -116,12 +120,37 @@
 (meow-define-keys 'agenda
   '("j" . meow-next)
   '("k" . meow-prev)
+  '("C-j" . scroll-half-page-up)
+  '("C-k" . scroll-half-page-down)
+  '("M-j" . (lambda () (interactive) (scroll-up-line 1)))
+  '("M-k" . (lambda () (interactive) (scroll-down-line 1)))
   '("]" . org-agenda-later)
   '("[" . org-agenda-earlier)
   '("SPC d s" . org-agenda-schedule)
   '("SPC t" . org-agenda-todo))
 
 (add-to-list 'meow-mode-state-list '(org-agenda-mode . agenda))
+
+;; Localleader keymaps----------------------------------------------------------
+
+;;;; Org
+(meow-define-state org
+  "meow state for org mode localleader"
+  :lighter " [O]"
+  :keymap meow-normal-state-keymap)
+
+;; (setq meow-cursor-type-org "box")
+(add-to-list 'meow-mode-state-list '(org-mode . org))
+
+;; Scheme geiser
+(meow-define-state scm
+  "meow state for scheme geiser mode localleader"
+  :lighter " [S]"
+  :keymap meow-normal-state-keymap)
+
+;; (setq meow-cursor-type-scm "box")
+(add-to-list 'meow-mode-state-list '(scheme-mode . scm))
+
 
 ;; Default settings ------------------------------------------------------------
 
@@ -202,8 +231,8 @@
 
 (use-package meow
   :ensure
-  :hook ((org-mode . (lambda () (meow-leader-change-keymap meow-local-leader-org-keys)))
-	 (geiser-mode . (lambda () (meow-leader-change-keymap meow-local-leader-geiser-keys))))
+  :hook ((meow-scm-mode . (lambda () (meow-leader-change-keymap meow-local-leader-geiser-keys)))
+	 (meow-org-mode . (lambda () (meow-leader-change-keymap meow-local-leader-org-keys))))
   :config
   (meow-setup)
   (meow-global-mode 1)

@@ -10,7 +10,7 @@
 ;;; Font and colors
 
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-(setq font-lock-maximum-decoration 2)
+(setq font-lock-maximum-decoration t)
 
 (use-package doom-themes
   :ensure t
@@ -38,6 +38,8 @@
 ;; (set-frame-font "Agave Nerd Font 16")
 ;; (set-frame-font "Terminess Nerd Font 20")
 ;; (set-frame-font "ComicShannsMono Nerd Font 16")
+;; (set-frame-font "ProFont 16")
+;; (set-frame-font "Indicate Mono 16") ;; Нет поддержки русского языка
 
 ;;; Line numbers
 (global-display-line-numbers-mode)
