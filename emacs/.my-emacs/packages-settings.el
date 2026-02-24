@@ -225,8 +225,8 @@
   :config
   (setq dired-listing-switches "-lah --group-directories-first")
   (setq dirvish-attributes
-	(append '(nerd-icons collapse vc-state)
-		'(git-msg file-size))))
+	(append '(nerd-icons vc-state)
+		'(file-size))))
 
 ;; Geiser and depended packages ------------------------------------------------
 (use-package paredit
@@ -267,7 +267,15 @@
 ;; Lua-mode --------------------------------------------------------------------
 (use-package lua-mode
   :ensure t
+  :hook (lua-mode . my/lua-mode-hook)
   :config
+
+  (defun my/lua-mode-hook ()
+    (set-face-attribute 'font-lock-builtin-face nil
+			:foreground nil
+			:background nil
+			:inherit 'default))
+  
   (setq lua-indent-level 8))
 
 ;; Dashboard -------------------------------------------------------------------
@@ -352,8 +360,7 @@
           embark-isearch-highlight-indicator))
   (setq embark-prompter 'embark-keymap-prompter)
   (setq embark-quit-after-action nil)
-  
-
+ 
   ;; Show the Embark target at point via Eldoc. You may adjust the
   ;; Eldoc strategy, if you want to see the documentation from
   ;; multiple providers. Beware that using this can be a little
@@ -402,9 +409,24 @@
   (setq sqlformat-command 'sql-formatter))
 
 ;; Org-wild-notifier -----------------------------------------------------------
-(use-package org-wild-notifier
+;; (use-package org-wild-notifier
+;;   :ensure t
+;;   :config
+;;   (org-wild-notifier-mode)
+;;   (setq alert-default-style 'libnotify)
+;;   (setq org-wild-notifier-alert-time '(5 0)))
+
+;; Highlight-numbers -----------------------------------------------------------
+(use-package highlight-numbers
+  :ensure t
+  :hook (prog-mode . highlight-numbers-mode)
+  :config)
+
+;; Beacon-mode------------------------------------------------------------------
+(use-package beacon
   :ensure t
   :config
-  (setq alert-default-style 'libnotify)
-  (setq org-wild-notifier-alert-time '(5 0)))
+  (beacon-mode 1))
+
+
 
