@@ -83,15 +83,27 @@
 (use-package highlight-parentheses
   :ensure t
   :config
-  (setq highlight-parentheses-background-colors `(,(face-attribute 'orderless-match-face-0 :foreground)
-						  ,(face-attribute 'orderless-match-face-1 :foreground)
-						  ,(face-attribute 'orderless-match-face-2 :foreground)
-						  ,(face-attribute 'orderless-match-face-3 :foreground)))
   
-  (setq highlight-parentheses-colors `(,(face-attribute 'highlight :foreground)
-				       ,(face-attribute 'highlight :foreground)
-				       ,(face-attribute 'highlight :foreground)
-				       ,(face-attribute 'highlight :foreground)))
+  ;; (setq highlight-parentheses-background-colors `(,(face-attribute 'orderless-match-face-0 :foreground)
+  ;; 						  ,(face-attribute 'orderless-match-face-1 :foreground)
+  ;; 						  ,(face-attribute 'orderless-match-face-2 :foreground)
+  ;; 						  ,(face-attribute 'orderless-match-face-3 :foreground)))
+  
+  ;; (setq highlight-parentheses-colors `(,(face-attribute 'highlight :foreground)
+  ;; 				       ,(face-attribute 'highlight :foreground)
+  ;; 				       ,(face-attribute 'highlight :foreground)
+  ;; 				       ,(face-attribute 'highlight :foreground)))
+
+  (setq highlight-parentheses-background-colors `(,(face-attribute 'font-lock-warning-face :background)
+						  ,(face-attribute 'font-lock-string-face :background)
+						  ,(face-attribute 'font-lock-keyword-face :background)
+						  ,(face-attribute 'font-lock-constant-face :background)))
+  
+  (setq highlight-parentheses-colors `(,(face-attribute 'font-lock-string-face :foreground)
+				       ,(face-attribute 'font-lock-string-face :foreground)
+				       ,(face-attribute 'font-lock-string-face :foreground)
+				       ,(face-attribute 'font-lock-string-face :foreground)))
+
   (global-highlight-parentheses-mode))
 
 ;; Doom modeline ---------------------------------------------------------------

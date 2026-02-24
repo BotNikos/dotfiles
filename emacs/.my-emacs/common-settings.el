@@ -3,43 +3,79 @@
 ;;; Global minor modes
 (winner-mode)
 (electric-pair-mode)
-(global-hl-line-mode)
-(global-display-fill-column-indicator-mode)
+;; (global-display-fill-column-indicator-mode)
 (global-visual-line-mode)
 
 ;;; Font and colors
 
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-(setq font-lock-maximum-decoration t)
+(setq font-lock-maximum-decoration 3)
 
 (use-package doom-themes
   :ensure t
-  ;; :config
+  :config
+  
   ;; Another good themes
+  
   ;; Light
-  ;; (load-theme 'doom-flatwhite t)
   ;; (load-theme 'doom-everforest-light t)
   ;; (load-theme 'doom-gruvbox-light t)
 
+  (load-theme 'doom-flatwhite t)
+
+
+  (defun my/theme-hook ()
+    ;; Builtin keywords
+    (set-face-attribute 'font-lock-builtin-face nil
+			:foreground "#5b4343"
+			:background "#f6cfcb"
+			:inherit nil)
+
+    ;; Function names
+    (set-face-attribute 'font-lock-function-name-face nil
+			:foreground "#614c61"
+			:background "#f1ddf1"
+			:weight 'regular
+			:inherit nil)
+
+    ;; Keywords
+    (set-face-attribute 'font-lock-keyword-face nil
+			:background nil)
+
+    ;; Numbers
+    (set-face-attribute 'font-lock-number-face nil
+			:foreground "#465953"
+			:background "#d2ebe3"))
+  
+  ;; (set-face-attribute 'highlight-numbers-number nil
+  ;; 		      :foreground "#525643"
+  ;; 		      :background "#e2e9c1")
+
+  ;; (set-face-attribute 'highlight-numbers-number nil
+  ;; 		      :foreground nil
+  ;; 		      :background nil
+  ;; 		      :inherit 'font-lock-constant-face)
+
+
   ;; Dark
+  ;; (setq doom-everforest-background "hard")
+  ;; (load-theme 'doom-everforest t)
+  
   ;; (load-theme 'doom-gruvbox)
   )
 
-(setq doom-everforest-background "hard")
-(load-theme 'doom-everforest t)
 
-
-(set-frame-font "Mononoki Nerd Font 16")
+(set-frame-font "Terminess Nerd Font 14")
 (setq-default line-spacing 0)
 
 ;; Еще несколько неплохих вариантов
-;; (set-frame-font "Miracode 14")
-;; (set-frame-font "Monaco 16")
-;; (set-frame-font "Agave Nerd Font 16")
-;; (set-frame-font "Terminess Nerd Font 20")
+;; (set-frame-font "Mononoki Nerd Font 14")
+;; (set-frame-font "Miracode 12")
+;; (set-frame-font "Monaco 12")
+;; (set-frame-font "Agave Nerd Font 14")
 ;; (set-frame-font "ComicShannsMono Nerd Font 16")
 ;; (set-frame-font "ProFont 16")
-;; (set-frame-font "Indicate Mono 16") ;; Нет поддержки русского языка
+;; (set-frame-font "Indicate Mono 14") ;; Нет поддержки русского языка
 
 ;;; Line numbers
 (global-display-line-numbers-mode)
@@ -61,7 +97,14 @@
 (setq js-indent-level tab-width)
 
 ;;; Fill-column indicator
-(setq-default fill-column 80)
-(set-face-attribute 'fill-column-indicator nil :foreground "grey40" :background nil)
+;; (setq-default fill-column 80)
+;; (set-face-attribute 'fill-column-indicator nil
+;; 		    :foreground "grey40"
+;; 		    :background nil)
 
 
+;; Major mode hook
+
+(add-hook 'window-configuration-change-hook (lambda ()
+					      (my/theme-hook)
+					      (run-mode-hooks (intern (format "%s-hook" major-mode)))))
