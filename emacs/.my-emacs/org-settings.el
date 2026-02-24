@@ -16,12 +16,11 @@
 							  (format-time-string "%Y") "/"
 							  (get-season (format-time-string "%m")) "/"
 							  (format-time-string "%m_%b") ".org")))
-	 "** TODO %? %i\n%u\n%a")))
+	 "** TODO %? %i ::INBOX::\n%t")))
 
 ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 2))
 ;; (setq org-preview-latex-default-process 'dvisvgm)
 ;; (setq org-startup-with-latex-preview t)
-
 
 ;; Agenda-files
 
@@ -77,5 +76,11 @@
 	 ("M-k" . org-metaup)
 	 ("M-l" . org-metaright))
   
-  :hook ((org-mode . org-indent-mode)
-	 (org-super-agenda-mode . (lambda () (setq org-habit-graph-column (- (window-width) 50))))))
+  :hook ((org-mode . my/org-mode-hook)
+	 (org-super-agenda-mode . my/org-mode-hook))
+
+  :config
+  (defun my/org-mode-hook ()
+    (org-indent-mode)
+    (setq org-habit-graph-column (- (window-width) 50))
+    (display-line-numbers-mode 0)))
