@@ -3,13 +3,12 @@
 ;;; Global minor modes
 (winner-mode)
 (electric-pair-mode)
-;; (global-display-fill-column-indicator-mode)
 (global-visual-line-mode)
 
 ;;; Font and colors
 
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-(setq font-lock-maximum-decoration 3)
+(setq font-lock-maximum-decoration 2)
 
 (use-package doom-themes
   :ensure t
@@ -64,16 +63,19 @@
   ;; (load-theme 'doom-gruvbox)
   )
 
+(set-frame-font "FantasqueSansM Nerd Font 13")
 
-(set-frame-font "Terminess Nerd Font 14")
 (setq-default line-spacing 0)
 
+
+
 ;; Еще несколько неплохих вариантов
-;; (set-frame-font "Mononoki Nerd Font 14")
-;; (set-frame-font "Miracode 12")
-;; (set-frame-font "Monaco 12")
 ;; (set-frame-font "Agave Nerd Font 14")
-;; (set-frame-font "ComicShannsMono Nerd Font 16")
+;; (set-frame-font "Mononoki Nerd Font 13")
+;; (set-frame-font "Miracode 12")
+;; (set-frame-font "Monaco 13")
+;; (set-frame-font "Terminess Nerd Font 14")
+;; (set-frame-font "ComicShannsMono Nerd Font 14")
 ;; (set-frame-font "ProFont 16")
 ;; (set-frame-font "Indicate Mono 14") ;; Нет поддержки русского языка
 
@@ -91,8 +93,13 @@
 ;; Disable backup files
 (setq make-backup-files nil)
 
+;; Garbage collector (100 MB)
+(setq gc-cons-threshold (* 100 1024 1024))
+
+
 ;;; Indentaion
 (setq-default tab-width 8)
+(setq sgml-basic-offset 8)
 (setq c-basic-offset tab-width)
 (setq js-indent-level tab-width)
 
@@ -104,7 +111,6 @@
 
 
 ;; Major mode hook
-
 (add-hook 'window-configuration-change-hook (lambda ()
 					      (my/theme-hook)
 					      (run-mode-hooks (intern (format "%s-hook" major-mode)))))

@@ -13,7 +13,7 @@ input {
             // For more information, see xkeyboard-config(7).
 
             // For example:
-            //layout "us,ru,us(dvp)"
+            //layout "us,ru,us(workman)"
             layout "us,ru"
             options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
 
@@ -284,6 +284,7 @@ layout {
 // See the binds section below for more spawn examples.
 
 spawn-sh-at-startup "emacs --init-directory=~/.my-emacs --daemon"
+spawn-sh-at-startup "veilad"
 spawn-sh-at-startup "eww daemon"
 spawn-sh-at-startup "eww open status-bar"
 //spawn-sh-at-startup "swaybg -m fill -i ~/gruvbox-wallpapers/wallpapers/minimalistic/this-wallpaper-is-not-available.png"
@@ -387,7 +388,7 @@ binds {
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
     Mod+Shift+Return hotkey-overlay-title="Open the eshell terminal" { spawn "emacsclient" "-c" "-e" "(eshell)"; }
     Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "~/.config/rofi/launchers/type-7/launcher.sh"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Super+Alt+L hotkey-overlay-title="Lock the Screen: veila" { spawn-sh "veila lock"; }
     Mod+E hotkey-overlay-title="Open the Emacs editor" { spawn "emacsclient" "-c" "-e" "(load-file \"~/.my-emacs/init.el\")"; }
     Mod+Shift+q hotkey-overlay-title="Edit via emacs-everywhere" { spawn "emacsclient" "-c" "-e" "(emacs-everywhere)"; }
     Mod+M hotkey-overlay-title="Open the Emacs file-manager" {spawn "emacsclient" "-c" "-e" "(dirvish)"; }

@@ -1,0 +1,24 @@
+include = ["/home/nikita/.config/veila/window.toml"]
+
+theme = "window"
+
+[background]
+mode = "file"
+path = "/home/nikita/Wallpapers/wallhaven-k81oj1_7680x4320.png"
+
+[weather]
+enabled = true
+location = "Moscow"
+
+[visuals.input]
+font_family="Mononoki Nerd Font"
+width=400
+
+[visuals.date]
+font_family="Mononoki Nerd Font"
+
+[visuals.clock]
+font_family="Mononoki Nerd Font"
+
+[visuals.weather]
+location_font_family="Mononoki Nerd Font"

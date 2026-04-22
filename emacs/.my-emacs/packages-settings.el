@@ -94,11 +94,16 @@
   ;; 				       ,(face-attribute 'highlight :foreground)
   ;; 				       ,(face-attribute 'highlight :foreground)))
 
-  (setq highlight-parentheses-background-colors `(,(face-attribute 'font-lock-warning-face :background)
-						  ,(face-attribute 'font-lock-string-face :background)
-						  ,(face-attribute 'font-lock-keyword-face :background)
-						  ,(face-attribute 'font-lock-constant-face :background)))
+  ;; (setq highlight-parentheses-background-colors `(,(face-attribute 'pulse-highlight-face :background)
+  ;; 						  ,(face-attribute 'font-lock-constant-face :background)
+  ;; 						  ,(face-attribute 'magit-diff-base :background)
+  ;; 						  ,(face-attribute 'font-lock-variable-name-face :background)))
   
+  (setq highlight-parentheses-background-colors `("#ffffaa"
+						  "#d2ebe3"
+						  "#f7e0c3"
+						  "#dde4f2"))
+
   (setq highlight-parentheses-colors `(,(face-attribute 'font-lock-string-face :foreground)
 				       ,(face-attribute 'font-lock-string-face :foreground)
 				       ,(face-attribute 'font-lock-string-face :foreground)
@@ -192,25 +197,31 @@
 (use-package eglot
   :after (tempel)
   :hook ((eglot-managed-mode . (lambda () (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'region) (tempel-setup-capf)))
-	 (c-mode . eglot-ensure))
+	 (c-mode . eglot-ensure)
+	 (js2-mode . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs '(c-mode "ccls")))
 
-;; Dimmer ----------------------------------------------------------------------
-(use-package dimmer
+;; Eldoc-box -------------------------------------------------------------------
+(use-package eldoc-box
   :ensure t
-  :config
-  (dimmer-configure-magit)
-  (dimmer-configure-org)
-  (dimmer-configure-posframe)
-  (setq dimmer-adjustment-mode :foreground)
-  (setq dimmer-fraction 0.30)
-  (setq dimmer-prevent-dimming-predicates '(window-minibuffer-p vertico-active-p))
-  (setq dimmer-exclusion-regexp-list '(" \\*\\(LV\\|transient\\)\\*"
-                                       "^\\*Minibuf-[0-9]+\\*"
-                                       "^.\\*which-key\\*$"
-                                       "^.\\*Echo.*\\*"))
-  :init (dimmer-mode))
+  :hook (eldoc-mode . eldoc-box-hover-mode))
+
+;; Dimmer ----------------------------------------------------------------------
+;; (use-package dimmer
+;;   :ensure t
+;;   :config
+;;   (dimmer-configure-magit)
+;;   (dimmer-configure-org)
+;;   (dimmer-configure-posframe)
+;;   (setq dimmer-adjustment-mode :foreground)
+;;   (setq dimmer-fraction 0.30)
+;;   (setq dimmer-prevent-dimming-predicates '(window-minibuffer-p vertico-active-p))
+;;   (setq dimmer-exclusion-regexp-list '(" \\*\\(LV\\|transient\\)\\*"
+;;                                        "^\\*Minibuf-[0-9]+\\*"
+;;                                        "^.\\*which-key\\*$"
+;;                                        "^.\\*Echo.*\\*"))
+;;   :init (dimmer-mode))
 
 ;; Dirvish ---------------------------------------------------------------------
 (use-package dirvish
@@ -428,5 +439,61 @@
   :config
   (beacon-mode 1))
 
+;; Plantuml -------------------------------------------------------------------
+(use-package plantuml-mode
+  :ensure t
+  :config
+  (setq plantuml-jar-path "~/plantuml.jar")
+  (setq org-plantuml-jar-path "~/plantuml.jar")
+  (setq plantuml-default-exec-mode 'jar)
+  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
 
+;; Vue-mode -------------------------------------------------------------------
+(use-package vue-mode
+  :ensure t
+  :config
+  (add-hook 'mmm-mode-hook
+            (lambda ()
+              (set-face-background 'mmm-default-submode-face nil))))
+
+;; Undo-fu --------------------------------------------------------------------
+(use-package undo-fu
+  :ensure t
+  :config
+  (setq undo-limit 67108864) ; 64 mb.
+  (setq undo-strong-limit 100663296) ; 96 mb.
+  (setq undo-outer-limit 1006632960) ; 960 mb
+  )
+
+(use-package js2-mode
+  :ensure t
+  :bind (:map js2-mode-map
+	      ("M-." . xref-find-definitions))
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+;; Emmet-mode -----------------------------------------------------------------
+(use-package emmet-mode
+  :ensure t
+  :bind (:map emmet-mode-keymap
+	      ("C-j" . nil)))
+
+;; Surround --------------------------------------------------------------------
+(use-package surround
+  :ensure t
+  :bind-keymap ("M-'" . surround-keymap))
+
+(use-package repeat-fu
+  :ensure t
+  :commands (repeat-fu-mode repeat-fu-execute)
+  :config
+  (setq repeat-fu-preset 'meow)
+  :hook
+  ((meow-mode)
+   .
+   (lambda ()
+     (when (and (not (minibufferp)) (not (derived-mode-p 'special-mode)))
+       (repeat-fu-mode)
+       (define-key meow-normal-state-keymap (kbd "'") 'repeat-fu-execute)
+       (define-key meow-insert-state-keymap (kbd "C-'") 'repeat-fu-execute)))))
 

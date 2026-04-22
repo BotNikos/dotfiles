@@ -12,7 +12,7 @@
 	("0" . meow-digit-argument)
 	("/" . meow-keypad-describe-key)
 	("?" . meow-cheatsheet)
-	
+
 	;; Some custom keys
 
 	;; Windows managment
@@ -27,7 +27,7 @@
 	("w c" . delete-window)
 	("w u" . winner-undo)
 	("w r" . winner-redo)
-	
+
 	;; Perspective keys
 	("TAB s" . persp-switch)
 	("TAB [" . persp-prev)
@@ -42,7 +42,7 @@
 	("b k" . kill-buffer-and-window)
 	("b i" . ibuffer)
 	("b b" . consult-buffer)
-	
+
 	;; Open things
 	("o /" . dirvish)
 	("o s" . (lambda ()
@@ -50,7 +50,7 @@
 		   (split-window-right)
 		   (other-window 1)
 		   (persp-switch-to-scratch-buffer)))
-        
+
 	;; Projectile keys
 	("p p" . projectile-switch-project)
 	("p a" . projectile-add-known-project)
@@ -65,6 +65,10 @@
 	("v b" . magit-branch-checkout)
 	("v B" . magit-blame-addition)
 
+	;; Org agenda keys
+	("a a" . org-agenda)
+	("a c" . org-capture)
+
 	;; File keys
 	("f r" . rename-file)
 	("f d" . delete-file)
@@ -73,12 +77,22 @@
 	;; Tempel keys
 	("t i" . tempel-insert)))
 
-(setq meow-local-leader-org-keys '(("n d s" . org-schedule)))
+(setq meow-local-leader-org-keys '(("n d s"	. org-schedule)
+				   ("n t"	. org-todo)
+				   ("n q"	. org-set-tags-command)
+				   ("n w"	. org-refile)
+				   ;; ROAM keys
+				   ("n r i"	. org-roam-node-insert)
+				   ("n r f"	. org-roam-node-find)
+				   ("n r c"	. org-roam-capture)
+				   ("n r b"	. org-roam-buffer-toggle)
+				   ;; Babel keys
+				   ("n b t"	. org-babel-tangle)))
 
-(setq meow-local-leader-geiser-keys '(("n e b" . geiser-eval-buffer)
-				      ("n e e" . geiser-eval-last-sexp)
-				      ("n e r" . geiser-eval-region)
-				      ("n '" . geiser-repl-switch)))
+(setq meow-local-leader-geiser-keys '(("n e b"	. geiser-eval-buffer)
+				      ("n e e"	. geiser-eval-last-sexp)
+				      ("n e r"	. geiser-eval-region)
+				      ("n '"	. geiser-repl-switch)))
 
 (defun meow-leader-change-keymap (keymap)
   (let ((new-keymap (append meow-default-leader-keys keymap)))
@@ -120,7 +134,7 @@
 (meow-define-keys 'agenda
   '("j" . meow-next)
   '("k" . meow-prev)
-  '("C-j" . scroll-half-page-up)
+  '("C-j" . scroll-half-page-u)
   '("C-k" . scroll-half-page-down)
   '("M-j" . (lambda () (interactive) (scroll-up-line 1)))
   '("M-k" . (lambda () (interactive) (scroll-down-line 1)))
@@ -131,39 +145,19 @@
 
 (add-to-list 'meow-mode-state-list '(org-agenda-mode . agenda))
 
-;; Localleader keymaps----------------------------------------------------------
-
-;;;; Org
-(meow-define-state org
-  "meow state for org mode localleader"
-  :lighter " [O]"
-  :keymap meow-normal-state-keymap)
-
-;; (setq meow-cursor-type-org "box")
-(add-to-list 'meow-mode-state-list '(org-mode . org))
-
-;; Scheme geiser
-(meow-define-state scm
-  "meow state for scheme geiser mode localleader"
-  :lighter " [S]"
-  :keymap meow-normal-state-keymap)
-
-;; (setq meow-cursor-type-scm "box")
-(add-to-list 'meow-mode-state-list '(scheme-mode . scm))
-
-
 ;; Default settings ------------------------------------------------------------
 
 (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
-  
+
   (meow-motion-define-key
    '("j" . meow-next)
    '("k" . meow-prev)
    '("<escape>" . ignore))
-  
+
   (apply #'meow-leader-define-key meow-default-leader-keys)
-  
+
+  ;; qwerty
   (meow-normal-define-key
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
@@ -227,12 +221,80 @@
    '("z" . meow-pop-selection)
    '("'" . repeat)
    '("=" . indent-region)
-   '("<escape>" . ignore)))
+   '("<escape>" . ignore))
+
+  ;; workman
+  ;;(meow-normal-define-key
+  ;; '("0" . meow-expand-0)
+  ;; '("9" . meow-expand-9)
+  ;; '("8" . meow-expand-8)
+  ;; '("7" . meow-expand-7)
+  ;; '("6" . meow-expand-6)
+  ;; '("5" . meow-expand-5)
+  ;; '("4" . meow-expand-4)
+  ;; '("3" . meow-expand-3)
+  ;; '("2" . meow-expand-2)
+  ;; '("1" . meow-expand-1)
+  ;; '("-" . negative-argument)
+  ;; '(";" . meow-reverse)
+  ;; '("," . meow-inner-of-thing)
+  ;; '("." . meow-bounds-of-thing)
+  ;; '("[" . meow-beginning-of-thing)
+  ;; '("]" . meow-end-of-thing)
+  ;; '("a" . meow-append)
+  ;; '("A" . meow-open-below)
+  ;; '("b" . meow-back-word)
+  ;; '("B" . meow-back-symbol)
+  ;; '("c" . meow-change)
+  ;; '("d" . meow-delete)
+  ;; '("D" . meow-backward-delete)
+  ;; '("h" . meow-next-word)
+  ;; '("H" . meow-next-symbol)
+  ;; '("f" . meow-find)
+  ;; '("g" . meow-cancel-selection)
+  ;; '("G" . meow-grab)
+  ;; '("y" . meow-left)
+  ;; '("Y" . meow-left-expand)
+  ;; '("i" . meow-insert)
+  ;; '("I" . meow-open-above)
+  ;; '("n" . meow-next)
+  ;; '("N" . meow-next-expand)
+  ;; '("e" . meow-prev)
+  ;; '("E" . meow-prev-expand)
+  ;; '("o" . meow-right)
+  ;; '("O" . meow-right-expand)
+  ;; '("m" . meow-join)
+  ;; '("k" . meow-search)
+  ;; '("l" . meow-block)
+  ;; '("L" . meow-to-block)
+  ;; '("p" . meow-yank)
+  ;; '("P" . consult-yank-from-kill-ring)
+  ;; '("q" . meow-quit)
+  ;; '("Q" . meow-goto-line)
+  ;; '("r" . meow-replace)
+  ;; '("R" . meow-swap-grab)
+  ;; '("s" . meow-kill)
+  ;; '("t" . meow-till)
+  ;; '("u" . meow-undo)
+  ;; '("U" . meow-undo-in-selection)
+  ;; '("v" . meow-visit)
+  ;; '("w" . meow-mark-word)
+  ;; '("W" . meow-mark-symbol)
+  ;; '("x" . meow-line)
+  ;; '("X" . meow-goto-line)
+  ;; '("j" . meow-save)
+  ;; '("J" . meow-sync-grab)
+  ;; '("z" . meow-pop-selection)
+  ;; '("'" . repeat)
+  ;; '("=" . indent-region)
+  ;; '("<escape>" . ignore))
+
+  )
 
 (use-package meow
   :ensure
-  :hook ((meow-scm-mode . (lambda () (meow-leader-change-keymap meow-local-leader-geiser-keys)))
-	 (meow-org-mode . (lambda () (meow-leader-change-keymap meow-local-leader-org-keys))))
+  :hook ((scheme-mode . (lambda () (meow-leader-change-keymap meow-local-leader-geiser-keys)))
+	 (org-mode . (lambda () (meow-leader-change-keymap meow-local-leader-org-keys))))
   :config
   (meow-setup)
   (meow-global-mode 1)

@@ -2,10 +2,10 @@
 
 (defun get-season (month-str)
   (pcase (string-to-number month-str)
-    ((or 12 1 2) "winter")
-    ((or 3 4 5) "spring")
-    ((or 6 7 8) "summer")
-    ((or 9 10 11) "fall")))
+    ((or 12 1  2)  "winter")
+    ((or 3  4  5)  "spring")
+    ((or 6  7  8)  "summer")
+    ((or 9  10 11) "fall")))
 
 (setq org-capture-templates
       `(("p" "Current project TODO" entry (file (lambda () (concat org-directory "/projects/" (projectile-project-name) ".org")))
@@ -16,11 +16,18 @@
 							  (format-time-string "%Y") "/"
 							  (get-season (format-time-string "%m")) "/"
 							  (format-time-string "%m_%b") ".org")))
-	 "** TODO %? %i ::INBOX::\n%t")))
+	 "** TODO %? %i :INBOX:\n%t\n")))
 
-;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 2))
-;; (setq org-preview-latex-default-process 'dvisvgm)
-;; (setq org-startup-with-latex-preview t)
+
+;; Refile
+
+(defun my/org-refile-no-todo-p ()
+  (not (member (org-get-todo-state) org-todo-keywords-1)))
+
+(setq org-refile-targets '((nil :maxlevel . 9)))
+(setq org-refile-target-verify-function 'my/org-refile-no-todo-p)
+(setq org-refile-use-outline-path 't)
+(setq org-outline-path-complete-in-steps nil)
 
 ;; Agenda-files
 
@@ -34,14 +41,14 @@
 			  (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
 			  (sequence "|" "OKAY(o)" "YES(y)" "NO(n)")))
 
-(setq org-todo-keyword-faces '(("[-]" .		(:inherit bold font-lock-constant-face org-todo))
-			       ("STRT" .	(:inherit bold font-lock-constant-face org-todo))
-			       ("[?]" .		(:inherit bold warning org-todo))
-			       ("WAIT" .	(:inherit bold warning org-todo))
-			       ("HOLD" .	(:inherit bold warning org-todo))
-			       ("PROJ" .	(:inherit bold font-lock-doc-face org-todo))
-			       ("NO" .		(:inherit bold error org-todo))
-			       ("KILL" .	(:inherit bold error org-todo))))
+(setq org-todo-keyword-faces '(("[-]"	. (:inherit bold font-lock-constant-face org-todo))
+			       ("STRT"	. (:inherit bold font-lock-constant-face org-todo))
+			       ("[?]"	. (:inherit bold warning org-todo))
+			       ("WAIT"	. (:inherit bold warning org-todo))
+			       ("HOLD"	. (:inherit bold warning org-todo))
+			       ("PROJ"	. (:inherit bold font-lock-doc-face org-todo))
+			       ("NO"	. (:inherit bold error org-todo))
+			       ("KILL"	. (:inherit bold error org-todo))))
 
 (setq org-habit-graph-column 100)
 
@@ -53,7 +60,8 @@
 							 (C		. t)
 							 (gnuplot	. t)
 							 (restclient	. t)
-							 (scheme	. t)))
+							 (scheme	. t)
+							 (plantuml	. t)))
 
 (defun org-return-dwim ()
   (interactive)
