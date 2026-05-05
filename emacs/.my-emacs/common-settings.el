@@ -7,67 +7,20 @@
 
 ;;; Font and colors
 
-(set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-(setq font-lock-maximum-decoration 2)
-
 (use-package doom-themes
   :ensure t
   :config
-  
   ;; Another good themes
   
   ;; Light
   ;; (load-theme 'doom-everforest-light t)
   ;; (load-theme 'doom-gruvbox-light t)
-
-  (load-theme 'doom-flatwhite t)
-
-
-  (defun my/theme-hook ()
-    ;; Builtin keywords
-    (set-face-attribute 'font-lock-builtin-face nil
-			:foreground "#5b4343"
-			:background "#f6cfcb"
-			:inherit nil)
-
-    ;; Function names
-    (set-face-attribute 'font-lock-function-name-face nil
-			:foreground "#614c61"
-			:background "#f1ddf1"
-			:weight 'regular
-			:inherit nil)
-
-    ;; Keywords
-    (set-face-attribute 'font-lock-keyword-face nil
-			:background nil)
-
-    ;; Numbers
-    (set-face-attribute 'font-lock-number-face nil
-			:foreground "#465953"
-			:background "#d2ebe3"))
-  
-  ;; (set-face-attribute 'highlight-numbers-number nil
-  ;; 		      :foreground "#525643"
-  ;; 		      :background "#e2e9c1")
-
-  ;; (set-face-attribute 'highlight-numbers-number nil
-  ;; 		      :foreground nil
-  ;; 		      :background nil
-  ;; 		      :inherit 'font-lock-constant-face)
-
-
-  ;; Dark
-  ;; (setq doom-everforest-background "hard")
-  ;; (load-theme 'doom-everforest t)
-  
-  ;; (load-theme 'doom-gruvbox)
-  )
+  (load-theme 'doom-flatwhite t))
 
 (set-frame-font "FantasqueSansM Nerd Font 13")
+(set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 
 (setq-default line-spacing 0)
-
-
 
 ;; Еще несколько неплохих вариантов
 ;; (set-frame-font "Agave Nerd Font 14")
@@ -103,14 +56,17 @@
 (setq c-basic-offset tab-width)
 (setq js-indent-level tab-width)
 
-;;; Fill-column indicator
-;; (setq-default fill-column 80)
-;; (set-face-attribute 'fill-column-indicator nil
-;; 		    :foreground "grey40"
-;; 		    :background nil)
+
+;; Scrolling
+(pixel-scroll-precision-mode 1)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ; one line at a time
+(setq mouse-wheel-progressive-speed nil)            ; don't accelerate scrolling
 
 
-;; Major mode hook
-(add-hook 'window-configuration-change-hook (lambda ()
-					      (my/theme-hook)
-					      (run-mode-hooks (intern (format "%s-hook" major-mode)))))
+;; Disable line numbers with large files
+(defun disable-line-numbers-if-large-file ()
+  "Disable line numbers if the buffer has more than 1000 lines."
+  (when (> (count-lines (point-min) (point-max)) 1000)
+    (display-line-numbers-mode 0)))
+
+(add-hook 'find-file-hook #'disable-line-numbers-if-large-file)
