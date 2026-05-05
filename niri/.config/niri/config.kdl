@@ -283,12 +283,16 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-spawn-sh-at-startup "emacs --init-directory=~/.my-emacs --daemon"
+spawn-sh-at-startup "emacs-pgtk --init-directory=~/.my-emacs --daemon"
+
 spawn-sh-at-startup "veilad"
+spawn-sh-at-startup "swayidle -w timeout 600 'dim -f 2 -a 0.8 -d 0 && veila lock'"
+
 spawn-sh-at-startup "eww daemon"
 spawn-sh-at-startup "eww open status-bar"
-//spawn-sh-at-startup "swaybg -m fill -i ~/gruvbox-wallpapers/wallpapers/minimalistic/this-wallpaper-is-not-available.png"
+
 spawn-sh-at-startup "awww-daemon"
+
 spawn-sh-at-startup "~/scm/eye_timer/eye_timer.scm 25m"
 spawn-sh-at-startup "~/scm/wallpapers/wallpapers.scm 30m /home/nikita/Wallpapers/"
 spawn-sh-at-startup "~/scm/battery/battery.scm"
