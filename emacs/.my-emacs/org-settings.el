@@ -31,8 +31,7 @@
 
 ;; Agenda-files
 
-(setq org-agenda-files '("~/org/" "~/org/work/" "~/org/daily/" "~/org/dnd/" "~/org/projects" ))
-(setq org-agenda-files (append org-agenda-files (directory-files-recursively "~/org/study/" "\\.org$")))
+(setq org-agenda-files '("~/org/" "~/org/projects" ))
 (setq org-agenda-files (append org-agenda-files (directory-files-recursively "~/org/todo/" "\\.org$")))
 
 (setq org-agenda-span 'day)
