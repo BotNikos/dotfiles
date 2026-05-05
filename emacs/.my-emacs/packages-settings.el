@@ -1,6 +1,13 @@
 (use-package nerd-icons
   :ensure t)
 
+(use-package nerd-icons-completion
+  :ensure t
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
 ;;; Perspective ----------------------------------------------------------------
 
 (use-package perspective
@@ -17,11 +24,50 @@
   (customize-set-variable 'even-window-sizes nil)
   (customize-set-variable 'ediff-window-setup-function 'ediff-setup-windows-plain))
 
+;; Embark ----------------------------------------------------------------------
+
+;; Consult users will also want the embark-consult package.
+(use-package embark-consult
+  :ensure t ; only need to install it, embark loads it after consult if found
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package embark
+  :ensure t
+
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init
+  (setq embark-indicators '(embark-minimal-indicator embark-highlight-indicator))
+  (setq embark-prompter 'embark-keymap-prompter)
+  (setq embark-quit-after-action nil)
+ 
+  :config
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+
 ;;; Vertico and dependet packages ----------------------------------------------
 
 (use-package emacs
   :custom
   (enable-recursive-minibuffers t))
+
+(use-package treesit
+  :ensure nil
+  :mode (("\\.c\\'" . c-ts-mode)
+         ("\\.cpp\\'" . cpp-ts-mode))
+  :config
+  (setq treesit-language-source-alist
+        '((c "https://github.com/tree-sitter/tree-sitter-c" "v0.20.8")
+	  (cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.22.0")))
+
+  (setq c-ts-mode-indent-offset 8))
 
 (use-package cape
   :ensure t
@@ -57,13 +103,13 @@
   :ensure t
   :init
   (setq completion-in-region-function #'consult-completion-in-region)
+  
   :config
   (setq vertico-count 17)
   (define-key vertico-map (kbd "C-j") #'vertico-next)
   (define-key vertico-map (kbd "C-k") #'vertico-previous)
-  (vertico-multiform-mode)
-  (add-to-list 'vertico-multiform-categories '(embark-keybinding grid))
-  (vertico-mode))
+  (vertico-mode)
+  (vertico-multiform-mode))
 
 ;;; Avy ------------------------------------------------------------------------
 
@@ -152,7 +198,7 @@
        :class app-name
        :title window-title
        :geometry window-geometry))))
- 
+
 
 ;; Org-super-agenda ------------------------------------------------------------
 
@@ -196,11 +242,16 @@
 ;; Eglot -----------------------------------------------------------------------
 (use-package eglot
   :after (tempel)
-  :hook ((eglot-managed-mode . (lambda () (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'region) (tempel-setup-capf)))
+  :hook ((eglot-managed-mode . (lambda ()
+				 (set-face-attribute 'eglot-highlight-symbol-face nil :inherit 'region)
+				 (tempel-setup-capf)))
 	 (c-mode . eglot-ensure)
+	 (c-ts-mode . eglot-ensure)
+	 (cpp-ts-mode . eglot-ensure)
 	 (js2-mode . eglot-ensure))
   :config
-  (add-to-list 'eglot-server-programs '(c-mode "ccls")))
+  (add-to-list 'eglot-server-programs '(c-mode "ccls"))
+  (add-to-list 'eglot-server-programs '(c-ts-mode "ccls")))
 
 ;; Eldoc-box -------------------------------------------------------------------
 (use-package eldoc-box
@@ -345,54 +396,6 @@
 (use-package restclient
   :ensure t)
 
-;; Embark ----------------------------------------------------------------------
-
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-
-(use-package embark
-  :ensure t
-
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
-  :init
-
-  ;; Optionally replace the key help with a completing-read interface
-  (setq p find-file refix-help-command #'embark-prefix-help-command)
-  (setq embark-indicators
-	'(embark-minimal-indicator  ; default is embark-mixed-indicator
-          embark-highlight-indicator
-          embark-isearch-highlight-indicator))
-  (setq embark-prompter 'embark-keymap-prompter)
-  (setq embark-quit-after-action nil)
- 
-  ;; Show the Embark target at point via Eldoc. You may adjust the
-  ;; Eldoc strategy, if you want to see the documentation from
-  ;; multiple providers. Beware that using this can be a little
-  ;; jarring since the message shown in the minibuffer can be more
-  ;; than one line, causing the modeline to move up and down:
-
-  ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
-
-  ;; Add Embark to the mouse context menu. Also enable `context-menu-mode'.
-  ;; (context-menu-mode 1)
-  ;; (add-hook 'context-menu-functions #'embark-context-menu 100)
-
-  :config
-
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
-
 ;; Org-roam --------------------------------------------------------------------
 (use-package org-roam
   :ensure t
@@ -465,6 +468,8 @@
   (setq undo-outer-limit 1006632960) ; 960 mb
   )
 
+;; JS2-mode --------------------------------------------------------------------
+
 (use-package js2-mode
   :ensure t
   :bind (:map js2-mode-map
@@ -497,3 +502,8 @@
        (define-key meow-normal-state-keymap (kbd "'") 'repeat-fu-execute)
        (define-key meow-insert-state-keymap (kbd "C-'") 'repeat-fu-execute)))))
 
+;; Garbage Collector Magic Hack --------------------------------------------------
+(use-package gcmh
+  :ensure t
+  :config
+  (gcmh-mode 1))
