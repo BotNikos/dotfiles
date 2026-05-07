@@ -51,12 +51,7 @@
                  nil
                  (window-parameters (mode-line-format . none)))))
 
-
-;;; Vertico and dependet packages ----------------------------------------------
-
-(use-package emacs
-  :custom
-  (enable-recursive-minibuffers t))
+;; Treesit ---------------------------------------------------------------------
 
 (use-package treesit
   :ensure nil
@@ -65,9 +60,17 @@
   :config
   (setq treesit-language-source-alist
         '((c "https://github.com/tree-sitter/tree-sitter-c" "v0.20.8")
-	  (cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.22.0")))
+	  (cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.22.0")
+	  (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "v0.20.1")
+	  (lua "https://github.com/tjdevries/tree-sitter-lua")))
 
   (setq c-ts-mode-indent-offset 8))
+
+;;; Vertico and dependet packages ----------------------------------------------
+
+(use-package emacs
+  :custom
+  (enable-recursive-minibuffers t))
 
 (use-package cape
   :ensure t
@@ -166,39 +169,6 @@
 		doom-modeline-icon nil
 		doom-modeline-buffer-encoding nil))
 
-;; Emacs everywhere ------------------------------------------------------------
-
-(use-package emacs-everywhere
-  :ensure t
-  :config
-
-  (setq emacs-everywhere-frame-name-format "emacs-everywhere ∷ %s — %s")
-  (add-to-list 'emacs-everywhere-markdown-apps "Keybase" t)
-
-  ;; Extend emacs-everywhere-system-configs
-  (setq emacs-everywhere-system-configs
-        (append emacs-everywhere-system-configs
-                '(((wayland . niri)
-                   :focus-command ("niri" "msg" "action" "focus-window" "--id" "%w")
-                   :info-function emacs-everywhere--app-info-linux-niri))))
-
-  (defun emacs-everywhere--app-info-linux-niri ()
-    "Return information on the current active window, on a Linux Niri session."
-    (require 'json)
-    (let* ((json (json-read-from-string
-		  (emacs-everywhere--call
-                   "niri" "msg" "-j" "focused-window"))) ;; -j for json
-	   (wid (cdr (assq 'id json)))
-	   (window-id (if (numberp wid) (number-to-string wid) wid))
-	   (window-title (cdr (assq 'title json)))
-	   (app-name (cdr (assq 'app_id json)))
-	   (window-geometry nil)) ;; no geometry in niri
-      (make-emacs-everywhere-app
-       :id window-id
-       :class app-name
-       :title window-title
-       :geometry window-geometry))))
-
 
 ;; Org-super-agenda ------------------------------------------------------------
 
@@ -216,15 +186,18 @@
 
 
 ;; Magit -----------------------------------------------------------------------
+
 (use-package magit
   :ensure t)
 
 ;; Spacious padding ------------------------------------------------------------
+
 (use-package spacious-padding
   :ensure t
   :init (spacious-padding-mode))
 
 ;; Zoom ------------------------------------------------------------------------
+
 (use-package zoom
   :ensure t
   :init (zoom-mode)
@@ -240,6 +213,7 @@
       (window-resize (selected-window) (- 5 (window-total-height)) nil t))))
 
 ;; Eglot -----------------------------------------------------------------------
+
 (use-package eglot
   :after (tempel)
   :hook ((eglot-managed-mode . (lambda ()
@@ -254,27 +228,13 @@
   (add-to-list 'eglot-server-programs '(c-ts-mode "ccls")))
 
 ;; Eldoc-box -------------------------------------------------------------------
+
 (use-package eldoc-box
   :ensure t
   :hook (eldoc-mode . eldoc-box-hover-mode))
 
-;; Dimmer ----------------------------------------------------------------------
-;; (use-package dimmer
-;;   :ensure t
-;;   :config
-;;   (dimmer-configure-magit)
-;;   (dimmer-configure-org)
-;;   (dimmer-configure-posframe)
-;;   (setq dimmer-adjustment-mode :foreground)
-;;   (setq dimmer-fraction 0.30)
-;;   (setq dimmer-prevent-dimming-predicates '(window-minibuffer-p vertico-active-p))
-;;   (setq dimmer-exclusion-regexp-list '(" \\*\\(LV\\|transient\\)\\*"
-;;                                        "^\\*Minibuf-[0-9]+\\*"
-;;                                        "^.\\*which-key\\*$"
-;;                                        "^.\\*Echo.*\\*"))
-;;   :init (dimmer-mode))
-
 ;; Dirvish ---------------------------------------------------------------------
+
 (use-package dirvish
   :ensure t
   :hook (dirvish-setup . (lambda () (display-line-numbers-mode -1)))
@@ -291,6 +251,7 @@
 		'(file-size))))
 
 ;; Geiser and depended packages ------------------------------------------------
+
 (use-package paredit
   :ensure t
   :bind (:map paredit-mode-map
@@ -309,17 +270,20 @@
     (define-key geiser-mode-map (kbd "C-.") nil)))
 
 ;; Diff-hl ---------------------------------------------------------------------
+
 (use-package diff-hl
   :ensure t
   :init (global-diff-hl-mode)
   (diff-hl-flydiff-mode))
 
 ;; hl-todo ---------------------------------------------------------------------
+
 (use-package hl-todo
   :ensure t
   :init (global-hl-todo-mode))
 
 ;; Colorful-mode ---------------------------------------------------------------
+
 (use-package colorful-mode
   :ensure t
   :config
@@ -327,20 +291,16 @@
   (global-colorful-mode))
 
 ;; Lua-mode --------------------------------------------------------------------
+
 (use-package lua-mode
   :ensure t
   :hook (lua-mode . my/lua-mode-hook)
   :config
-
-  (defun my/lua-mode-hook ()
-    (set-face-attribute 'font-lock-builtin-face nil
-			:foreground nil
-			:background nil
-			:inherit 'default))
-  
+    
   (setq lua-indent-level 8))
 
 ;; Dashboard -------------------------------------------------------------------
+
 (use-package dashboard
   :ensure t
   :config
@@ -367,6 +327,7 @@
   :ensure t)
 
 ;; Ibuffer-projectile ----------------------------------------------------------
+
 (use-package ibuffer-vc
   :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
   :ensure t)
@@ -397,6 +358,7 @@
   :ensure t)
 
 ;; Org-roam --------------------------------------------------------------------
+
 (use-package org-roam
   :ensure t
   :config
@@ -417,32 +379,28 @@
 
 
 ;; Sqlformatter ----------------------------------------------------------------
+
 (use-package sqlformat
   :ensure t
   :config
   (setq sqlformat-command 'sql-formatter))
 
-;; Org-wild-notifier -----------------------------------------------------------
-;; (use-package org-wild-notifier
-;;   :ensure t
-;;   :config
-;;   (org-wild-notifier-mode)
-;;   (setq alert-default-style 'libnotify)
-;;   (setq org-wild-notifier-alert-time '(5 0)))
-
 ;; Highlight-numbers -----------------------------------------------------------
+
 (use-package highlight-numbers
   :ensure t
   :hook (prog-mode . highlight-numbers-mode)
   :config)
 
 ;; Beacon-mode------------------------------------------------------------------
+
 (use-package beacon
   :ensure t
   :config
   (beacon-mode 1))
 
 ;; Plantuml -------------------------------------------------------------------
+
 (use-package plantuml-mode
   :ensure t
   :config
@@ -452,6 +410,7 @@
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
 
 ;; Vue-mode -------------------------------------------------------------------
+
 (use-package vue-mode
   :ensure t
   :config
@@ -460,6 +419,7 @@
               (set-face-background 'mmm-default-submode-face nil))))
 
 ;; Undo-fu --------------------------------------------------------------------
+
 (use-package undo-fu
   :ensure t
   :config
@@ -468,25 +428,7 @@
   (setq undo-outer-limit 1006632960) ; 960 mb
   )
 
-;; JS2-mode --------------------------------------------------------------------
-
-(use-package js2-mode
-  :ensure t
-  :bind (:map js2-mode-map
-	      ("M-." . xref-find-definitions))
-  :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
-
-;; Emmet-mode -----------------------------------------------------------------
-(use-package emmet-mode
-  :ensure t
-  :bind (:map emmet-mode-keymap
-	      ("C-j" . nil)))
-
-;; Surround --------------------------------------------------------------------
-(use-package surround
-  :ensure t
-  :bind-keymap ("M-'" . surround-keymap))
+;; Repeat-fu -------------------------------------------------------------------
 
 (use-package repeat-fu
   :ensure t
@@ -502,8 +444,43 @@
        (define-key meow-normal-state-keymap (kbd "'") 'repeat-fu-execute)
        (define-key meow-insert-state-keymap (kbd "C-'") 'repeat-fu-execute)))))
 
-;; Garbage Collector Magic Hack --------------------------------------------------
+
+;; JS2-mode --------------------------------------------------------------------
+
+(use-package js2-mode
+  :ensure t
+  :bind (:map js2-mode-map
+	      ("M-." . xref-find-definitions))
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+;; Emmet-mode -----------------------------------------------------------------
+
+(use-package emmet-mode
+  :ensure t
+  :bind (:map emmet-mode-keymap
+	      ("C-j" . nil)))
+
+;; Surround --------------------------------------------------------------------
+
+(use-package surround
+  :ensure t
+  :bind-keymap ("M-'" . surround-keymap))
+
+
+;; Garbage Collector Magic Hack ------------------------------------------------
+
 (use-package gcmh
   :ensure t
   :config
+
+  ;; Garbage collector (100 MB)
+  (setq gc-cons-threshold (* 100 1024 1024))
   (gcmh-mode 1))
+
+;; Org appear ------------------------------------------------------------------
+(use-package org-appear
+  :ensure t
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-hide-emphasis-markers t))
