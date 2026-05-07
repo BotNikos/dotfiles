@@ -286,7 +286,7 @@ layout {
 spawn-sh-at-startup "emacs-pgtk --init-directory=~/.my-emacs --daemon"
 
 spawn-sh-at-startup "veilad"
-spawn-sh-at-startup "swayidle -w timeout 600 'dim -f 2 -a 0.8 -d 0 && veila lock'"
+spawn-sh-at-startup "swayidle -w timeout 600 'dim -f 2 -a 1 -d 2 && veila lock'"
 
 spawn-sh-at-startup "eww daemon"
 spawn-sh-at-startup "eww open status-bar"
