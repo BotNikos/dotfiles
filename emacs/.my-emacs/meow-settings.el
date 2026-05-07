@@ -75,7 +75,10 @@
 	("f c" . copy-file)
 
 	;; Tempel keys
-	("t i" . tempel-insert)))
+	("t i" . tempel-insert)
+	
+	;; Debugger
+	("d" . meow-gdb-mode)))
 
 (setq meow-local-leader-org-keys '(("n d s"	. org-schedule)
 				   ("n t"	. org-todo)
@@ -129,7 +132,7 @@
   :lighter " [A]"
   :keymap meow-agenda-keymap)
 
-(setq meow-cursor-type-agenda "box")
+(setq meow-cursor-type-agenda 'box)
 
 (meow-define-keys 'agenda
   '("j" . meow-next)
@@ -144,6 +147,31 @@
   '("SPC t" . org-agenda-todo))
 
 (add-to-list 'meow-mode-state-list '(org-agenda-mode . agenda))
+
+;; Gdb keymap -----------------------------------------------------------------
+
+(setq meow-gdb-keymap (make-keymap))
+(meow-define-state gdb
+  "meow state for gdb-debugger"
+  :lighter " [D]"
+  :keymap meow-gdb-keymap)
+
+(setq meow-cursor-type-gdb 'box)
+
+(meow-define-keys 'gdb
+  '("<escape>" . meow-normal-mode)
+  '("j" . meow-next)
+  '("k" . meow-prev)
+  '("h" . meow-left)
+  '("l" . meow-right)
+  
+  '("n" . gud-next)
+  '("s" . gud-step)
+  '("c" . gud-cont)
+  '("b" . gud-break)
+  '("r" . gud-remove)
+  '("R" . gud-run)
+  '("p" . gud-print))
 
 ;; Default settings ------------------------------------------------------------
 

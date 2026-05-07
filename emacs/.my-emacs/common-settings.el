@@ -45,10 +45,8 @@
 
 ;; Disable backup files
 (setq make-backup-files nil)
-
-;; Garbage collector (100 MB)
-(setq gc-cons-threshold (* 100 1024 1024))
-
+(setq read-process-output-max (* 4 1024 1024))
+(setq-default bidi-display-reordering 'left-to-right)
 
 ;;; Indentaion
 (setq-default tab-width 8)
@@ -61,6 +59,11 @@
 (pixel-scroll-precision-mode 1)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ; one line at a time
 (setq mouse-wheel-progressive-speed nil)            ; don't accelerate scrolling
+
+;; GDB
+
+(setq gdb-many-windows t)
+(setq gdb-restore-window-configuration-after-quit t)
 
 
 ;; Disable line numbers with large files
