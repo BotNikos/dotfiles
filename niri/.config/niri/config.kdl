@@ -13,7 +13,7 @@ input {
             // For more information, see xkeyboard-config(7).
 
             // For example:
-            //layout "us,ru,us(workman)"
+            // layout "us,ru,us(workman)"
             layout "us,ru"
             options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
 
@@ -105,6 +105,11 @@ output "eDP-1" {
     // If the position is unset or results in an overlap, the output is instead placed
     // automatically.
     position x=5120 y=0
+}
+
+output "DP-5" {
+    mode "2560x1440@60"
+    position x=2560 y=0
 }
 
 output "DP-6" {
@@ -286,7 +291,7 @@ layout {
 spawn-sh-at-startup "emacs-pgtk --init-directory=~/.my-emacs --daemon"
 
 spawn-sh-at-startup "veilad"
-spawn-sh-at-startup "swayidle -w timeout 600 'dim -f 2 -a 1 -d 2 && veila lock'"
+spawn-sh-at-startup "swayidle -w timeout 600 'dim -f 5 -a 1 -d 7 && veila lock'"
 
 spawn-sh-at-startup "eww daemon"
 spawn-sh-at-startup "eww open status-bar"

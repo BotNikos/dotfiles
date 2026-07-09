@@ -8,6 +8,10 @@
   (nerd-icons-completion-mode)
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
 ;;; Perspective ----------------------------------------------------------------
 
 (use-package perspective
@@ -128,6 +132,11 @@
   :ensure t)
 
 ;; Parenthesis setup ----------------------------------------------------------
+
+(use-package smartparens
+  :ensure t
+  :config
+  (smartparens-global-mode))
 
 (use-package highlight-parentheses
   :ensure t
@@ -252,19 +261,9 @@
 
 ;; Geiser and depended packages ------------------------------------------------
 
-(use-package paredit
-  :ensure t
-  :bind (:map paredit-mode-map
-	      ("C-)" . paredit-forward-slurp-sexp)
-	      ("C-(" . paredit-backward-slurp-sexp)
-	      ("C-}" . paredit-forward-barf-sexp)
-	      ("C-{" . paredit-backward-barf-sexp)
-	      ("C-j" . scroll-half-page-up)
-	      ("C-k" . scroll-half-page-down)))
-
 (use-package geiser-chicken
   :ensure t
-  :hook ((geiser-mode . (lambda () (paredit-mode) (my/geiser-mode-bindings))))
+  :hook ((geiser-mode . (lambda () (my/geiser-mode-bindings))))
   :config
   (defun my/geiser-mode-bindings ()
     (define-key geiser-mode-map (kbd "C-.") nil)))
@@ -484,3 +483,23 @@
   :hook (org-mode . org-appear-mode)
   :config
   (setq org-hide-emphasis-markers t))
+
+;; Buffer-terminator -----------------------------------------------------------
+(use-package buffer-terminator
+  :ensure t
+  :custom
+  (buffer-terminator-inactivity-timeout (* 30 60))
+  (buffer-terminatlr-interval (* 10 60))
+  :config
+  (buffer-terminator-mode 1))
+
+;; Inhibit mouse ---------------------------------------------------------------
+(use-package inhibit-mouse
+  :ensure t
+  :custom
+  (inhibit-mouse-adjust-mouse-highlight t)
+  (inhibit-mouse-adjust-show-help-function t)
+  :config
+  (if (daemonp)
+      (add-hook 'server-after-make-frame-hook #'inhibit-mouse-mode)
+    (inhibit-mouse-mode 1)))

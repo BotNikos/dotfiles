@@ -37,7 +37,10 @@
 	("TAB t" . persp-switch-to-scratch-buffer)
 
 
+	;; Search keys
 	("s s" . avy-goto-char-timer)
+	("s b" . consult-line) ;; Search in buffer
+		
 	("."   . find-file)
 	("b k" . kill-buffer-and-window)
 	("b i" . ibuffer)
@@ -249,7 +252,14 @@
    '("z" . meow-pop-selection)
    '("'" . repeat)
    '("=" . indent-region)
-   '("<escape>" . ignore))
+   '("<escape>" . ignore)
+   
+   ;; Smartparens-mode
+   '("(" . sp-backward-slurp-sexp)
+   '(")" . sp-forward-slurp-sexp)
+   
+   '("M-(" . sp-backward-barf-sexp)
+   '("M-)" . sp-forward-barf-sexp))
 
   ;; workman
   ;;(meow-normal-define-key

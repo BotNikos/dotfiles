@@ -3,6 +3,7 @@ if status is-interactive
     set fish_cursor_default block
     set -gx TERM xterm-256color
 
+    if [ -s "/etc/grc.fish" ]; source /etc/grc.fish; end
     ./PokeTerm/pokeTerm
 
     function fish_user_key_bindings
@@ -74,6 +75,5 @@ function y
     end
     rm -f -- "$tmp"
 end
-
 
 zoxide init fish --cmd cd | source
