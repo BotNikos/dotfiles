@@ -293,7 +293,6 @@
 
 (use-package lua-mode
   :ensure t
-  :hook (lua-mode . my/lua-mode-hook)
   :config
     
   (setq lua-indent-level 8))
@@ -452,6 +451,39 @@
 	      ("M-." . xref-find-definitions))
   :config
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+
+;; Polymode -------------------------------------------------------------------
+(use-package polymode
+  :ensure t
+  :config
+  ;; 1. В качестве хоста используем классический встроенный js-mode
+  (define-hostmode poly-js-hostmode :mode 'js-mode)
+
+  ;; 2. Внутренний режим для HTML
+  (define-innermode poly-js-html-innermode
+    :mode 'html-mode
+    :head-matcher "html`"
+    :tail-matcher "`"
+    :head-mode 'host
+    :tail-mode 'host)
+
+  ;; 3. Внутренний режим для CSS
+  (define-innermode poly-js-css-innermode
+    :mode 'css-mode
+    :head-matcher "css`"
+    :tail-matcher "`"
+    :head-mode 'host
+    :tail-mode 'host)
+
+  ;; 4. Собираем полимод воедино
+  (define-polymode poly-javascript-lit-mode
+    :hostmode 'poly-js-hostmode
+    :innermodes '(poly-js-html-innermode poly-js-css-innermode))
+
+  ;; 5. Ассоциируем с расширениями файлов
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . poly-javascript-lit-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . poly-javascript-lit-mode)))
 
 ;; Emmet-mode -----------------------------------------------------------------
 
