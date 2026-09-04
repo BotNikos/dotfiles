@@ -10,6 +10,9 @@
 (setq org-capture-templates
       `(("p" "Current project TODO" entry (file (lambda () (concat org-directory "/projects/" (projectile-project-name) ".org")))
 	 "** TODO %? %i\n%u\n%a")
+	
+	("s" "Select project TODO" entry (file (lambda () (read-file-name "Capture to file:" (file-name-concat org-directory "projects/"))))
+	 "** TODO %? %i\n%u\n%a")
 
 	("t" "Common TODO" entry (file (lambda () (concat org-directory
 							  "/todo/"
@@ -17,7 +20,6 @@
 							  (get-season (format-time-string "%m")) "/"
 							  (format-time-string "%m_%b") ".org")))
 	 "** TODO %? %i :INBOX:\n%t\n")))
-
 
 ;; Refile
 
